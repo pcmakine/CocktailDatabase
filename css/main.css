@@ -3,3 +3,32 @@
     Author     : pcmakine@cs
 */
 
+body{margin: 10px}
+#tableArea{margin: 50px}
+#newDrinkTable{margin: 50px}
+
+input{
+    margin: 10px;
+}
+
+button{
+    margin-top: 10px;
+}
+
+label{
+    float: left;
+    width: 100px;
+    margin: 10px;
+}
+
+#textarea{
+    overflow: auto;
+}
+
+#info{
+   float:left;
+}
+
+#infoboxes{
+    float:left;
+}
