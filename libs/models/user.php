@@ -17,7 +17,7 @@ class user {
       return $this -> username;
   }
   
-    public function getRights(){
+  public function getRights(){
       return $this -> accessrights;
   }
   
@@ -37,5 +37,8 @@ class user {
   return $results;
 }
 
+public function getSingleUser($user, $userpsw){
+    $sql = "SELECT username, password, from users";
+}
 
 }

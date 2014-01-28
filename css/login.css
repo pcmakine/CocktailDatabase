@@ -1,0 +1,10 @@
+body{margin: 10px}
+
+#inputcontainer{
+    width:300px;
+}
+
+input {
+    float:right;
+    clear:both;
+}
