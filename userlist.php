@@ -4,7 +4,6 @@ require_once "libs/models/user.php";
 
 //Lista asioista array-tietotyyppiin laitettuna:
 $list = user::getUsers();
-$password = user::getPassword();
 
 ?><!DOCTYPE HTML>
 <html>

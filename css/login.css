@@ -1,10 +1,13 @@
-body{margin: 10px}
+h1, form, .alert{
+    display:inline;
+    margin:5px;
 
-#inputcontainer{
-    width:300px;
 }
 
-input {
-    float:right;
-    clear:both;
+.alert{
+    color:yellow;
+}
+
+#content{
+    color:blue;
 }
