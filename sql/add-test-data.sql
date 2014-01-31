@@ -7,6 +7,6 @@ insert into ingredient(ingname) values('water'),
 insert into cocktail_ingredient_link(ingname, cocktailid) values('orange', 2),
                                                                 ('water', 1);
 insert into rating(username, cocktailid, rating) values('pete', 1, 5),
-                                                        ('mickey mouse',1, 3),
+                                                        ('mickey mouse',1, 5),
                                                         ('pete', 2, 4),
                                                         ('mickey mouse', 2, 4);

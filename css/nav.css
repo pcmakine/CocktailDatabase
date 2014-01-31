@@ -1,0 +1,19 @@
+body{
+    margin:10px;
+}
+
+root { 
+    display: block;
+}
+h1{
+    display:inline;
+    margin-bottom: 25px;
+}
+#header{
+    margin-bottom: 20px;
+}
+
+#signout{
+    float:right;
+    display:inline;
+}

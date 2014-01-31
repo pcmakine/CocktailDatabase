@@ -3,30 +3,34 @@
 require_once 'libs/common.php';
 require_once 'libs/models/user.php';
 
+if(isSignedIn()){
+    header('Location: frontpage.php');
+}
+
 if (empty($_POST["user"])) {
-    showView("showlogin.php", array(
+    showLoginScreen("showlogin.php", array(
         'error' => "Kirjautuminen epäonnistui! Et antanut käyttäjätunnusta.",
     ));
 }
 
-$user = $_POST["user"];
+$username = $_POST["user"];
 
 if (empty($_POST["password"])) {
-    showView("views/showlogin.php", array(
-        'user' => $user,
+    showLoginScreen("views/showlogin.php", array(
+        'user' => $username,
         'error' => "Kirjautuminen epäonnistui! Et antanut salasanaa.",
     ));
 }
 
 $password = $_POST["password"];
 
-/* Tarkistetaan onko parametrina saatu oikeat tunnukset */
-if (user::getSingleUser($user, $password) != NULL) {
-    /* Jos tunnus on oikea, ohjataan käyttäjä sopivalla HTTP-otsakkeella kissalistaan. */
-    header('Location: listtest.php');
+$user = user::getSingleUser($username, $password);
+if ($user != NULL) {
+    $_SESSION['signedin'] = $user;
+    header('Location: frontpage.php');
 } else {
     /* Väärän tunnuksen syöttänyt saa eteensä kirjautumislomakkeen. */
-    showView('views/showlogin.php', array(
-        'user' => $user,
+    showLoginScreen('views/showlogin.php', array(
+        'user' => $username,
         'error' => "Kirjautuminen epäonnistui! Antamasi tunnus tai salasana on väärä."));
 }
