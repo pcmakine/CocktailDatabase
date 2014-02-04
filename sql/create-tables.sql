@@ -4,7 +4,7 @@ create table users(username varchar(30) primary key not null,
 
 create table cocktail(id serial primary key,
                         cocktailname varchar(20) not null,
-                        recipe varchar(500),
+                        recipe text,
                         price decimal);
 
 create table rating(username varchar(30) not null references users(username),

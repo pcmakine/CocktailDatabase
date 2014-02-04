@@ -15,7 +15,7 @@ class cocktail {
         $this->name = $name;
         $this->recipe = $recipe;
         $this->price = $price;
-        $this->rating = $this->avgRating();
+        $this -> setAvgRating();
     }
 
     public function getId() {
@@ -53,8 +53,19 @@ class cocktail {
         }
         return $results;
     }
+    
+    public function numofCocktails(){
+        $sql = "SELECT COUNT(id) FROM cocktail";
+        
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute();
+        
+        $result = $query->fetchObject();
+        return $result -> count;
+        
+    }
 
-    public function avgRating() {
+    public function setAvgRating() {
         $sql = "SELECT cocktailid, rating from rating where cocktailid = ?";
         $query = connection::getConnection()->prepare($sql);
         $query->execute(array($this->id));
@@ -65,11 +76,14 @@ class cocktail {
             $sumofratings = $sumofratings + $result->rating;
             $rows++;
         }
-        $result = ($sumofratings / $rows);
-
-        return $result;
+        if($rows == 0){
+            $this -> rating = "no ratings yet";
+        }else{
+            $this->rating = ($sumofratings / $rows);
+        }
     }
-
+    
+    
 }
 
 ?>

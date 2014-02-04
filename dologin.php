@@ -26,8 +26,7 @@ $password = $_POST["password"];
 
 $user = user::getSingleUser($username, $password);
 if ($user != NULL) {
-    $_SESSION['signedin'] = $user;
-    header('Location: frontpage.php');
+    signIn($user);
 } else {
     /* Väärän tunnuksen syöttänyt saa eteensä kirjautumislomakkeen. */
     showLoginScreen('views/showlogin.php', array(
