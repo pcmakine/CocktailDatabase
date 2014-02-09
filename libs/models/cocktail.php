@@ -38,11 +38,11 @@ class cocktail {
         return $this->rating;
     }
 
-    public function getCocktails() {
-        $sql = "SELECT id, cocktailname, recipe, price from cocktail";
+    public function getCocktails($limit, $page) {
+        $sql = "SELECT * from cocktail  order by cocktailname LIMIT ? OFFSET ?";
 
         $query = connection::getConnection()->prepare($sql);
-        $query->execute();
+        $query->execute(array($limit, ($page-1)*$limit));
 
         $results = array();
         foreach ($query->fetchAll(PDO::FETCH_OBJ) as $result) {
@@ -54,15 +54,27 @@ class cocktail {
         return $results;
     }
     
+    public function getSingleCocktail($id){
+        $sql = "SELECT * from cocktail where id = ?";
+        
+        $query = connection::getConnection()->prepare($sql);
+        $query -> execute(array($id));
+        
+        $result = $query->fetchObject();
+        $cocktail = new cocktail($result->id, $result->cocktailname, $result->recipe, $result->price);
+        
+        return $cocktail;
+        
+    }
+    
     public function numofCocktails(){
-        $sql = "SELECT COUNT(id) FROM cocktail";
+        $sql = "SELECT COUNT(*) FROM cocktail";
         
         $query = connection::getConnection()->prepare($sql);
         $query->execute();
+        $rows = $query -> fetchColumn();
         
-        $result = $query->fetchObject();
-        return $result -> count;
-        
+        return $rows;
     }
 
     public function setAvgRating() {
@@ -77,13 +89,11 @@ class cocktail {
             $rows++;
         }
         if($rows == 0){
-            $this -> rating = "no ratings yet";
+            $this -> rating = "ei vielä arvosteltu";
         }else{
             $this->rating = ($sumofratings / $rows);
         }
     }
-    
-    
 }
 
 ?>

@@ -17,9 +17,9 @@ class user {
     public function getUsername() {
         return $this->username;
     }
-    
-    public function getPassword(){
-        return $this -> password;
+
+    public function getPassword() {
+        return $this->password;
     }
 
     public function getRights() {
@@ -52,8 +52,23 @@ class user {
         if ($result == null) {
             return null;
         } else {
-            $user = new user($result->username, $result->password, $result->accessrights);  
+            $user = new user($result->username, $result->password, $result->accessrights);
             return $user;
         }
     }
+
+    public static function getAccess($uname) {
+        $sql = "SELECT accessrights from users where username = ?";
+
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute(array($uname));
+
+        $result = $query->fetchObject();
+        if ($result == null) {
+            return null;
+        } else {
+            return $result->accessrights;
+        }
+    }
+
 }

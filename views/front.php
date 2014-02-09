@@ -10,14 +10,19 @@
             <th>Hinta euroa/annos</th>
         </tr>
 
-        <?php
-        foreach ($data->list as $asia) { ?>
+        <?php foreach ($data->list as $asia) { ?>
             <tr>
-                <td><a href="http://pcmakine.users.cs.helsinki.fi/cocktaildatabase/html-demo/info.html"><?php echo $asia -> getName(); ?></a></td>
-                <td><?php echo $asia -> getRating();?></td>
-                <td><?php echo $asia -> getPrice();?></td>
+                <td><a href="cocktailinfo.php?id=<?php echo $asia->getId() ?>"><?php echo $asia->getName() ?></a></td>
+                <td><?php echo $asia->getRating(); ?></td>
+                <td><?php echo $asia->getPrice(); ?></td>
             </tr>
         <?php } ?> 
-
     </table>
 </div>
+
+<?php if ($data->page > 0): ?>
+    <a href="frontpage.php?page=<?php echo $data->page - 1; ?>">Edellinen sivu</a>
+<?php endif; ?>
+<?php if ($data->page < $data->pagestotal): ?>
+    <a href="frontpage.php?page=<?php echo $data->page + 1; ?>">Seuraava sivu</a>
+<?php endif; ?>

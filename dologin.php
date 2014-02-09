@@ -13,23 +13,24 @@ if (empty($_POST["user"])) {
     ));
 }
 
-$username = $_POST["user"];
+$uname = $_POST["user"];
 
 if (empty($_POST["password"])) {
     showLoginScreen("views/showlogin.php", array(
-        'user' => $username,
+        'user' => $uname,
         'error' => "Kirjautuminen epäonnistui! Et antanut salasanaa.",
     ));
 }
 
 $password = $_POST["password"];
 
-$user = user::getSingleUser($username, $password);
+$user = user::getSingleUser($uname, $password);
 if ($user != NULL) {
-    signIn($user);
+    signIn($uname);
 } else {
     /* Väärän tunnuksen syöttänyt saa eteensä kirjautumislomakkeen. */
     showLoginScreen('views/showlogin.php', array(
-        'user' => $username,
+        'title' => 'login',
+        'user' => $uname,
         'error' => "Kirjautuminen epäonnistui! Antamasi tunnus tai salasana on väärä."));
 }

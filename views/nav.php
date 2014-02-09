@@ -14,8 +14,11 @@
             <a id ="signout"href="http://pcmakine.users.cs.helsinki.fi/cocktaildatabase/logout.php">Kirjaudu ulos</a>
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#">Drinkit</a></li>
-                <li><a href="http://pcmakine.users.cs.helsinki.fi/cocktaildatabase/html-demo/suggest.html#">Ehdota uutta drinkkiä</a></li>
-
+                <?php if($data -> accessrights == 'a'){?>
+                    <li><a href="http://pcmakine.users.cs.helsinki.fi/cocktaildatabase/html-demo/suggest.html#">Lisää drinkkejä tietokantaan</a></li>
+                <?php }else{?>
+                    <li><a href="http://pcmakine.users.cs.helsinki.fi/cocktaildatabase/html-demo/suggest.html#">Ehdota uutta drinkkiä</a></li>
+               <?php }?>
             </ul>
 
         </div>
