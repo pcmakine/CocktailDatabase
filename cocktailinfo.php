@@ -24,7 +24,8 @@ if (!isSignedIn()) {
         'rating' => $cocktail->getRating(),
         'price' => $cocktail->getPrice(),
         'recipe' => $cocktail->getRecipe(),
-        'accessrights' => getUserAccessRights()));
+        'accessrights' => getUserAccessRights(),
+            'editable' => false));
 }
 }
 
