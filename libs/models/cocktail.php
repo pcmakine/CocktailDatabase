@@ -64,7 +64,27 @@ class cocktail {
         $cocktail = new cocktail($result->id, $result->cocktailname, $result->recipe, $result->price);
         
         return $cocktail;
+    }
+    
+    public function addCocktail(){
+        $sql = "insert into cocktail(cocktailname, recipe, price) values(?,?,?) returning id";
         
+        $query = connection::getConnection()-> prepare($sql);
+        $ok = $query-> execute(array($this->name, $this->recipe, $this->price));
+        
+        if($ok){
+            $this->id = $query->fetchColumn();
+        }
+        
+        return $ok;
+    }
+
+    public function addRating($username, $rating){
+        if($rating != ''){
+            $sql = "insert into rating(username, cocktailid, rating) values(?,?,?)";
+            $query = connection::getConnection()-> prepare($sql);
+            $query-> execute(array($username, $this->getId(), $rating));
+        }
     }
     
     public function numofCocktails(){

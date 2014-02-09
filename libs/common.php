@@ -31,10 +31,19 @@ function signout() {
     header('Location: dologin.php');
 }
 
-function getUserAccessRights(){
-    $user= $_SESSION['signedin'];
-    
+function getUserAccessRights() {
+    $user = $_SESSION['signedin'];
+
     return User::getAccess($user);
 }
 
+function activateRightTab($active) {
+    ?> <li <?php if ($data->active == 'frontpage') { ?>
+            class="active">
+            <a href="#">Drinkit</a></li>
+    <?php } else { ?>
+        <li><a href="frontpage.php">Drinkit</a></li>
+    <?php
+    }
+}
 ?>

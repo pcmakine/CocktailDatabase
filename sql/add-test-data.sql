@@ -1,9 +1,9 @@
 insert into users(username, password, accessrights) values('pete', 'admin', 'a'), 
                                                             ('mickey mouse', 'regular', 'r');
-insert into cocktail(id, cocktailname, recipe, price) values(default, 'water', null, 0.05),
-                                                            (default, 'orange juice', 'Ravista mehupurkkia ja kaada mehu lasiin!', 0.3),
-                                                            (default, 'apple juice', null, 0.3),
-                                                            (default, 'pineapple juice', null, 0.3);
+insert into cocktail(id, cocktailname, recipe, price, suggestion) values(default, 'water', null, 0.05, false),
+                                                            (default, 'orange juice', 'Ravista mehupurkkia ja kaada mehu lasiin!', 0.3, false),
+                                                            (default, 'apple juice', null, 0.3, false),
+                                                            (default, 'pineapple juice', null, 0.3, false);
 insert into ingredient(ingname) values('water'),
                                         ('orange');
 insert into cocktail_ingredient_link(ingname, cocktailid) values('orange', 2),

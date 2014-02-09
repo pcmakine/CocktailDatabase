@@ -26,8 +26,7 @@ if (isSignedIn()) {
         'list' => $list,
         'page' => $page,
         'pagestotal' => $pagestotal,
-        'accessrights' => $accessrights,
-        'active' => "drinklist"));
+        'accessrights' => $accessrights));
 } else {
     header('Location: dologin.php');
 }

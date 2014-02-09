@@ -2,3 +2,8 @@
 }
 
 #recipe{display:inline;}
+
+button{
+    display:block;
+    margin-top:5px;
+}
