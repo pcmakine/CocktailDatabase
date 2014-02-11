@@ -20,9 +20,12 @@
     </table>
 </div>
 
-<?php if ($data->page > 0): ?>
+<?php if ($data->page > 1): ?>
     <a href="frontpage.php?page=<?php echo $data->page - 1; ?>">Edellinen sivu</a>
 <?php endif; ?>
 <?php if ($data->page < $data->pagestotal): ?>
     <a href="frontpage.php?page=<?php echo $data->page + 1; ?>">Seuraava sivu</a>
 <?php endif; ?>
+
+    <br>Yhteensä <?php echo $data->numofcocktails; ?> drinkkiä. 
+Olet sivulla <?php echo $data->page; ?>/<?php echo $data->pagestotal; ?>.

@@ -1,9 +1,17 @@
 <?php
+
 require_once 'libs/common.php';
 require_once 'libs/models/cocktail.php';
 
 if (!isSignedIn()) {
     header('Location: dologin.php');
+}
+
+if (!isset($_POST["savebutton"])) {
+    showView("addcocktailview.php", array(
+        'title' => 'add cocktail',
+        'accessrights' => getUserAccessRights(),
+    ));
 }
 
 if (empty($_POST["name"])) {

@@ -4,16 +4,14 @@
 </head>
 <form name="submitnewdrink" action="addcocktail.php" method="POST">
     <div> 
-        <label>Drinkin nimi </label><input type="text" name="name" id="name">
-        <label>Arvosana</label><input type = "text" name ="rating" id ="rating">
-        <label>Arvioitu hinta</label><input type="text" name="price">
+        <label for="name" class="required">Drinkin nimi </label><input type="text" name="name" id="name" maxlength="20" required>
+        <label for="rating">Arvosana</label><input type = "text" name ="rating" id ="rating">
+        <label for="price">Arvioitu hinta</label><input type="text" name="price" id="price">
 
-        <p>Valmistusohje</p>
-        <textarea rows="10" cols="44" name="recipe">
+        <label for="recipe">Valmistusohje</label>
+        <textarea rows="10" cols="44" name="recipe" id="recipe" maxlength="1000"></textarea> <br>
 
-        </textarea> <br>
-
-        <button type = submit ><?php
+        <button type = submit name="savebutton" ><?php
 if ($data->accessrights == 'a') {
     echo "Tallenna uusi drinkki"
    ?><?php } else { ?>

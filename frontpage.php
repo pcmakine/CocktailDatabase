@@ -3,8 +3,6 @@
 require_once 'libs/common.php';
 require_once 'libs/models/cocktail.php';
 
-$page = 1;
-
 if (isset($_GET['page'])) {
     $page = (int) $_GET['page'];
 
@@ -12,7 +10,7 @@ if (isset($_GET['page'])) {
     if ($page < 1)
         $page = 1;
 }
-$perpage = 2;
+$perpage = 3;
 
 $list = cocktail::getCocktails($perpage, $page);
 
@@ -26,6 +24,7 @@ if (isSignedIn()) {
         'list' => $list,
         'page' => $page,
         'pagestotal' => $pagestotal,
+        'numofcocktails' => $numofcocktails,
         'accessrights' => $accessrights));
 } else {
     header('Location: dologin.php');
