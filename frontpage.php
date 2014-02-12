@@ -14,9 +14,17 @@ if (isset($_GET['page'])) {
 }
 $perpage = 3;
 
-$list = cocktail::getCocktails($perpage, $page);
+$list;
+$numofcocktails;
 
-$numofcocktails = cocktail::numofCocktails();
+if(getUserAccessRights()){
+    $list= cocktail::getCocktails($perpage, $page);
+    $numofcocktails = cocktail::numofCocktails();
+}else{
+    $list = cocktail::getApprovedCocktails($perpage, $page);
+    $numofcocktails = cocktail::numofApprovedCocktails();
+}
+
 $pagestotal = ceil($numofcocktails / $perpage);
 
 $accessrights = getUserAccessRights();

@@ -16,7 +16,6 @@ if (!isset($_POST["savebutton"])) {
     ));
 }
 
-checkForErrors();
 if (!empty($errors)) {
     showView("addcocktailview.php", array(
         'title' => 'add cocktail',
@@ -24,7 +23,7 @@ if (!empty($errors)) {
         'errors' => $errors
     ));
 } else {
-    $cocktail = new cocktail(-1, htmlspecialchars($_POST["name"]), htmlspecialchars($_POST["recipe"]), $_POST["price"]);
+    $cocktail = new cocktail(-1, htmlspecialchars($_POST["name"]), htmlspecialchars($_POST["recipe"]), $_POST["price"], getCorrectValueForSuggestion());
     $cocktail->addCocktail();
     $cocktail->addRating($_SESSION['signedin'], $_POST["rating"]);
 
@@ -32,13 +31,13 @@ if (!empty($errors)) {
     header('Location: frontpage.php');
 }
 
-function checkForErrors() {
-    checkThatInputNumeric('price', 'hinnan');
-    checkThatInputNumeric('rating', 'arvosanan');
+function getCorrectValueForSuggestion() {
+    if(getUserAccessRights()){
+        return 0;
+    } else{
+        return 1;
+    }
 }
 
-function checkThatInputNumeric($input, $name) {
-    $errors[$input] = + "$name on oltava numeerinen!";
-}
 
 ?>

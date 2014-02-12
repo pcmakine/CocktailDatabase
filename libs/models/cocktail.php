@@ -18,20 +18,36 @@ class cocktail {
         $this->price = $price;
         $this->suggestion = $suggestion;
         $this->setAvgRating();
-        $this->fixEmptyPrice();        //in case the user gave empty string price change them to null
+        $this->fixEmptyAttributes();
     }
 
-    private function fixEmptyPrice() {
+    private function fixEmptyAttributes() {
         if ($this->price == '') {
-            $this->price = NULL;
+            $this->price = null; //the user might give an empty string for price
         }
     }
 
     public function getCocktails($limit, $page) {
-        $sql = "SELECT * from cocktail  order by cocktailname LIMIT ? OFFSET ?";
+        $sql = "SELECT id, cocktailname, recipe, price, suggestion::int from cocktail order by cocktailname LIMIT ? OFFSET ?";
 
         $query = connection::getConnection()->prepare($sql);
         $query->execute(array($limit, ($page - 1) * $limit));
+
+        $results = array();
+        foreach ($query->fetchAll(PDO::FETCH_OBJ) as $result) {
+            $cocktail = new cocktail($result->id, $result->cocktailname, $result->recipe, $result->price, $result->suggestion);
+            //$array[] = $muuttuja; lisää muuttujan arrayn perään. 
+            //Se vastaa melko suoraan ArrayList:in add-metodia.
+            $results[] = $cocktail;
+        }
+        return $results;
+    }
+
+    public function getApprovedCocktails($limit, $page) {
+        $sql = "SELECT id, cocktailname, recipe, price, suggestion::int from cocktail where suggestion = ? order by cocktailname LIMIT ? OFFSET ?";
+
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute(array(0, $limit, ($page - 1) * $limit));
 
         $results = array();
         foreach ($query->fetchAll(PDO::FETCH_OBJ) as $result) {
@@ -56,10 +72,10 @@ class cocktail {
     }
 
     public function addCocktail() {
-        $sql = "insert into cocktail(cocktailname, recipe, price) values(?,?,?) returning id";
+        $sql = "insert into cocktail(cocktailname, recipe, price, suggestion) values(?,?,?,?) returning id";
 
         $query = connection::getConnection()->prepare($sql);
-        $ok = $query->execute(array($this->name, $this->recipe, $this->price));
+        $ok = $query->execute(array($this->name, $this->recipe, $this->price, $this->suggestion));
 
         if ($ok) {
             $this->id = $query->fetchColumn();
@@ -88,6 +104,17 @@ class cocktail {
 
         $query = connection::getConnection()->prepare($sql);
         $query->execute();
+        $rows = $query->fetchColumn();
+
+        return $rows;
+    }
+
+    public function numofApprovedCocktails() {
+
+        $sql = "SELECT COUNT(id) FROM cocktail where suggestion =?";
+
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute(array(0));
         $rows = $query->fetchColumn();
 
         return $rows;

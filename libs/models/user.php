@@ -11,7 +11,7 @@ class user {
     public function __construct($username, $password, $accessrights) {
         $this->username = $username;
         $this->password = $password;
-        $this->accessrights = $accessrights;
+        $this->accessrights = user::accessbitToBoolean($accessrights);
     }
 
     public function getUsername() {
@@ -27,7 +27,7 @@ class user {
     }
 
     public static function getUsers() {
-        $sql = "SELECT username,password, accessrights from users";
+        $sql = "SELECT username,password, accessrights::int from users";
 
         $query = connection::getConnection()->prepare($sql);
         $query->execute();
@@ -43,7 +43,7 @@ class user {
     }
 
     public static function getSingleUser($user, $userpsw) {
-        $sql = "SELECT username, password, accessrights from users where username = ? AND password = ? LIMIT 1";
+        $sql = "SELECT username, password, accessrights::int from users where username = ? AND password = ? LIMIT 1";
 
         $query = connection::getConnection()->prepare($sql);
         $query->execute(array($user, $userpsw));
@@ -67,7 +67,15 @@ class user {
         if ($result == null) {
             return null;
         } else {
-            return $result->accessrights;
+            return user::accessbitToBoolean($result->accessrights);
+        }
+    }
+
+    public static function accessbitToBoolean($bit) {
+        if ($bit == 1) {
+            return true;
+        } else {
+            return false;
         }
     }
 

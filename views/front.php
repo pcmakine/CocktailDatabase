@@ -8,13 +8,19 @@
             <th>Nimi</th>
             <th>Arvosana</th>
             <th>Hinta euroa/annos</th>
+            <?php if ($data->accessrights): ?>
+            <th>Ehdotus</th>
+             <?php endif; ?>
         </tr>
 
-        <?php foreach ($data->list as $asia) { ?>
+        <?php foreach ($data->list as $cocktail) { ?>
             <tr>
-                <td><a href="cocktailinfo.php?id=<?php echo $asia->getId() ?>"><?php echo $asia->getName() ?></a></td>
-                <td><?php echo $asia->getRating(); ?></td>
-                <td><?php echo $asia->getPrice(); ?></td>
+                <td><a href="cocktailinfo.php?id=<?php echo $cocktail->getId() ?>"><?php echo $cocktail->getName() ?></a></td>
+                <td><?php echo $cocktail->getRating(); ?></td>
+                <td><?php echo $cocktail->getPrice(); ?></td>
+                <?php if ($data->accessrights): ?>
+                    <td><?php echo $cocktail->getSuggestion(); ?></td>
+                <?php endif; ?>
             </tr>
         <?php } ?> 
     </table>
@@ -27,5 +33,5 @@
     <a href="frontpage.php?page=<?php echo $data->page + 1; ?>">Seuraava sivu</a>
 <?php endif; ?>
 
-    <br>Yhteensä <?php echo $data->numofcocktails; ?> drinkkiä. 
+<br>Yhteensä <?php echo $data->numofcocktails; ?> drinkkiä. 
 Olet sivulla <?php echo $data->page; ?>/<?php echo $data->pagestotal; ?>.
