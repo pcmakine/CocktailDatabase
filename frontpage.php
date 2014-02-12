@@ -3,6 +3,8 @@
 require_once 'libs/common.php';
 require_once 'libs/models/cocktail.php';
 
+$page = 1;
+
 if (isset($_GET['page'])) {
     $page = (int) $_GET['page'];
 

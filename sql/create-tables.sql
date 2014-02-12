@@ -1,6 +1,6 @@
 create table users(username varchar(30) primary key not null,
                       password varchar(20) not null,
-                       accessrights varchar(1) not null);
+                       accessrights boolean not null);
 
 create table cocktail(id serial primary key,
                         cocktailname varchar(20) not null,

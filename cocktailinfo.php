@@ -9,7 +9,7 @@ $cocktail = cocktail::getSingleCocktail($id);
 if (!isSignedIn()) {
     header('Location: dologin.php');
 } else {
-    if (isset($_POST['edit'])) {
+    if (isset($_POST['edit'])) {        //the user has pressed the edit button
 
     showView('cocktailview.php', array('id' => $id,
         'name' => $cocktail->getName(),
@@ -18,7 +18,12 @@ if (!isSignedIn()) {
         'recipe' => $cocktail->getRecipe(),
         'accessrights' => getUserAccessRights(),
         'editable' => true));
-}  else{
+}  else if(isset($_POST['savebutton'])){    //the user has pressed the save button
+    cocktail::updateCocktail($id, htmlspecialchars($_POST['name']), $_POST['recipe'], $_POST['price']);
+    $_SESSION['announcement'] = 'Drinkin muokkaus onnistui!';
+    header('Location: frontpage.php');
+}
+else{
         showView('cocktailview.php', array('id' => $id,
         'name' => $cocktail->getName(),
         'rating' => $cocktail->getRating(),

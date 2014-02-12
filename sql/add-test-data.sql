@@ -1,5 +1,5 @@
-insert into users(username, password, accessrights) values('pete', 'admin', 'a'), 
-                                                            ('mickey mouse', 'regular', 'r');
+insert into users(username, password, accessrights) values('pete', 'admin', true), 
+                                                            ('mickey mouse', 'regular', false);
 insert into cocktail(id, cocktailname, recipe, price, suggestion) values(default, 'water', null, 0.05, false),
                                                             (default, 'orange juice', 'Ravista mehupurkkia ja kaada mehu lasiin!', 0.3, false),
                                                             (default, 'apple juice', null, 0.3, false),
