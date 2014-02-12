@@ -19,7 +19,7 @@ if (!isSignedIn()) {
         'accessrights' => getUserAccessRights(),
         'editable' => true));
 }  else if(isset($_POST['savebutton'])){    //the user has pressed the save button
-    cocktail::updateCocktail($id, htmlspecialchars($_POST['name']), $_POST['recipe'], $_POST['price']);
+    cocktail::updateCocktail($id, htmlspecialchars($_POST['name']), htmlspecialchars($_POST['recipe']), $_POST['price']);
     $_SESSION['announcement'] = 'Drinkin muokkaus onnistui!';
     header('Location: frontpage.php');
 }

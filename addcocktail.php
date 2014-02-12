@@ -24,7 +24,7 @@ if (!empty($errors)) {
         'errors' => $errors
     ));
 } else {
-    $cocktail = new cocktail(-1, $_POST["name"], $_POST["recipe"], $_POST["price"]);
+    $cocktail = new cocktail(-1, htmlspecialchars($_POST["name"]), htmlspecialchars($_POST["recipe"]), $_POST["price"]);
     $cocktail->addCocktail();
     $cocktail->addRating($_SESSION['signedin'], $_POST["rating"]);
 
