@@ -9,8 +9,8 @@
             <th>Arvosana</th>
             <th>Hinta euroa/annos</th>
             <?php if ($data->accessrights): ?>
-            <th>Ehdotus</th>
-             <?php endif; ?>
+                <th>Ehdotus</th>
+            <?php endif; ?>
         </tr>
 
         <?php foreach ($data->list as $cocktail) { ?>
