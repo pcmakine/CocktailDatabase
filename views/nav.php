@@ -40,7 +40,7 @@
             <?php require $page; ?>
 
             <?php if (!empty($_SESSION['announcement'])): ?>
-                <div class="alert alert-danger">
+                <div class="alert alert-success">
                     <?php echo $_SESSION['announcement']; ?>
                 </div>
                 <?php

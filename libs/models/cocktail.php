@@ -80,8 +80,14 @@ class cocktail {
         if ($ok) {
             $this->id = $query->fetchColumn();
         }
-
         return $ok;
+    }
+
+    public static function removeCocktail($id) {
+        $sql = "delete from cocktail where id = ?";
+
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute(array($id));
     }
 
     public function updateCocktail($id, $name, $recipe, $price) {

@@ -1,11 +1,17 @@
 .infofields{display:inline-block;
 }
 
-#recipe{display:inline;}
+#recipe{
+    display:inline;
+}
 
+.alert{
+    display:block;
+}
 
 button{
     margin-top:5px;
+    margin-bottom:5px;
 }
 
 label{

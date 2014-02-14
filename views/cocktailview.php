@@ -15,9 +15,9 @@
                                                 readonly>
         <?php } ?> <br>
 
-        <label for="price"> Hinta: </label><input type="text" name="price" id="price" value="<?php echo $data->price ?>"<?php if (!$data->editable) { ?> 
-                                                      pattern="\d*\.?\d*" title="Syötteen täytyy olla numeerinen"
-                                                      readonly>
+        <label for="price"> Arvioitu Hinta: </label><input type="text" name="price" id="price" pattern="\d*\.?\d*" title="Syötteen täytyy olla numeerinen"
+                                                           value="<?php echo $data->price ?>"<?php if (!$data->editable) { ?> 
+                                                               readonly>
         <?php } ?><br>
         <label for="rating"> Arvosana: </label><input type="text" name="rating" id="rating" value="<?php echo $data->rating ?>"
                                                       pattern="[1-5]" title="Arvosanan täytyy olla välillä 1-5" readonly>
@@ -26,11 +26,23 @@
     <?php if ($data->accessrights): ?>
         <div>
             <button type ="submit" name="edit" id="edit">Muokkaa</button>
+            <button type ="submit" name="removebutton" id="remove">Poista</button>
             <?php if ($data->editable): ?>       <!--        means that the edit button has been pressed -> we can show the save button-->
                 <button type ="submit" name="savebutton" id="save">Tallenna</button>
             <?php endif; ?>
         </div>
     <?php endif; ?>
 
-</form>
+    <?php
+    if (!empty($data->error)):
+        ?>
+        <div class="alert alert-danger"> 
+            <?php echo $data->error; ?><br>
+            <button type ="submit" name="confirmremove" id="remove">Kyllä</button>
+            <button type ="submit" name="cancelremove" id="remove">Peruuta</button>
+        </div>
+    </form>
+    <?php endif; ?>
+
+
 
