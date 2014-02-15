@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><?php echo $data->title; ?></title>
+        <title>Drinkkiarkisto</title>
         <link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/bootstrap-theme.css" rel="stylesheet">
         <link href="css/nav.css" rel="stylesheet">
@@ -19,7 +19,7 @@
         }
         ?>
         <div id ="header">
-            <h1>Drinkkiarkisto</h1>
+            <a id="mainlink" href="http://pcmakine.users.cs.helsinki.fi/cocktaildatabase/frontpage.php"><h1>Drinkkiarkisto</h1></a>
             <a id ="signout"href="http://pcmakine.users.cs.helsinki.fi/cocktaildatabase/logout.php">Kirjaudu ulos</a>
             <ul class="nav nav-tabs">
                 <li <?php if ($page == 'front.php') { ?>

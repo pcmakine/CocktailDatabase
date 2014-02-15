@@ -1,4 +1,6 @@
-.infofields{display:inline-block;
+.ingredientfields, .infofields{
+    display:inline-block;
+    vertical-align:top
 }
 
 #recipe{

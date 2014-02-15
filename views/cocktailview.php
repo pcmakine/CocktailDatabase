@@ -23,9 +23,19 @@
                                                       pattern="[1-5]" title="Arvosanan täytyy olla välillä 1-5" readonly>
     </div>
 
+    <div class ="ingredientfields">
+        <?php for ($i = 0; $i < count($data->ingredients); $i++) { ?>
+            <label for="ingredient <?php echo($i+1)?>"> Ainesosa <?php echo $i+1?> </label><input type="text" id="name" name="name"
+                                                           value="<?php echo $data->ingredients[$i]->getName() ?>"<?php if (!$data->editable) { ?> 
+                                                               readonly>
+            <?php } ?> <br>
+        <?php } ?>
+
+    </div>
+
     <?php if ($data->accessrights): ?>
         <div>
-            <button type ="submit" name="edit" id="edit">Muokkaa</button>
+            <button type ="submit" name="edit" id="edit" >Muokkaa</button>
             <button type ="submit" name="removebutton" id="remove">Poista</button>
             <?php if ($data->editable): ?>       <!--        means that the edit button has been pressed -> we can show the save button-->
                 <button type ="submit" name="savebutton" id="save">Tallenna</button>
@@ -42,7 +52,7 @@
             <button type ="submit" name="cancelremove" id="remove">Peruuta</button>
         </div>
     </form>
-    <?php endif; ?>
+<?php endif; ?>
 
 
 

@@ -2,6 +2,13 @@ body{
     margin:10px;
 }
 
+#mainlink:link{
+    color:black;
+}
+
+#mainlink:hover{
+    color:#539deb;
+}
 root { 
  
 }

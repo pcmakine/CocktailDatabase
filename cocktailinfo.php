@@ -2,16 +2,20 @@
 
 require_once 'libs/common.php';
 require_once 'libs/models/cocktail.php';
+require_once 'libs/models/ingredient.php';
 
 $id = (int) $_GET['id'];
 $cocktail = cocktail::getSingleCocktail($id);
+$ingredientlist = ingredient::getIngredientsForCocktail($id);
 $dataArray = array('id' => $id,
     'name' => $cocktail->getName(),
     'rating' => $cocktail->getRating(),
     'price' => $cocktail->getPrice(),
     'recipe' => $cocktail->getRecipe(),
     'accessrights' => getUserAccessRights(),
-    'title' => 'info');
+    'title' => 'info',
+    'ingredients'=> $ingredientlist
+);
 
 if (!isSignedIn()) {
     header('Location: dologin.php');

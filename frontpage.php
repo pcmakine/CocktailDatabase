@@ -17,7 +17,7 @@ $perpage = 3;
 $list;
 $numofcocktails;
 
-if(getUserAccessRights()){
+if(getUserAccessRights()){      //pääkäyttäjä
     $list= cocktail::getCocktails($perpage, $page);
     $numofcocktails = cocktail::numofCocktails();
 }else{

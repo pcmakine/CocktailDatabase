@@ -13,8 +13,8 @@ class cocktail {
 
     public function __construct($id, $name, $recipe, $price, $suggestion) {
         $this->id = $id;
-        $this->name = $name;
-        $this->recipe = $recipe;
+        $this->name = trim($name);
+        $this->recipe = trim($recipe);
         $this->price = $price;
         $this->suggestion = $suggestion;
         $this->setAvgRating();
@@ -167,7 +167,6 @@ class cocktail {
     public function getSuggestion() {
         return $this->suggestion;
     }
-
 }
 
 ?>
