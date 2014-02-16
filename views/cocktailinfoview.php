@@ -30,16 +30,17 @@
                    value="<?php echo $data->ingredients[$i] ?>"<?php if (!$data->editable) { ?> 
                        readonly           
                    <?php } ?>>
-               
-            <button class ="removebutton" type ="submit" name="removebtns[]">Poista</button>
-               <?php } ?>
-                <?php if ($data->editable): ?><br>
-        <button type ="submit" class="button" name="addingredientbutton" id="addingredient">Lisää uusi ainesosa</button>
-    <?php endif; ?>
-    </div><br>
 
-    <?php if ($data->accessrights): ?>
-        <div>
+            <?php if ($data->editable): ?>
+                <button class ="removebutton" type ="submit" name="removebtns[]" value="<?php echo $i ?>">Poista</button>
+            <?php endif; ?>
+
+        <?php } ?>
+        <?php if ($data->editable): ?><br>
+            <button type ="submit" class="button" name="addingredientbutton" id="addingredient">Lisää uusi ainesosa</button>
+
+        <?php endif; ?></div><br>
+    <?php if ($data->accessrights): ?><div>
             <button class="button" type ="submit" name="edit" id="edit" >Muokkaa</button>
             <button class="button" type ="submit" name="removebutton" id="remove">Poista</button>
             <?php if ($data->editable): ?>       <!--        means that the edit button has been pressed -> we can show the save button-->
