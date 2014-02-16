@@ -36,7 +36,7 @@ if (!$accessrights) {   //tavallinen käyttäjä, näytä aina vain hyväksytyt 
 $pagestotal = ceil($numofcocktails / $perpage);
 
 if (isSignedIn()) {
-    showView('front.php', array('title' => "frontpage",
+    showView('frontpageview.php', array('title' => "frontpage",
         'list' => $list,
         'page' => $page,
         'pagestotal' => $pagestotal,

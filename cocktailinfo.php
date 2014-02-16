@@ -23,12 +23,12 @@ if (!isSignedIn()) {
     if(!isset($_POST['removebtns']) && !isset($_POST['edit']) && !isset($_POST['confirmremove']) &&  !isset($_POST['removebutton'])
              && !isset($_POST['addingredientbutton']) && !isset($_POST['savebutton'])){
         $dataArray['editable'] = false;
-        showView('cocktailview.php', $dataArray);
+        showView('cocktailinfoview.php', $dataArray);
     }
     else if (isset($_POST['edit'])) {        //the user has pressed the edit button
         $dataArray['editable'] = true;
         $dataArray['ingredients'] = $_POST['ingredient'];
-        showView('cocktailview.php', $dataArray);
+        showView('cocktailinfoview.php', $dataArray);
         
     }else if(isset($_POST['confirmremove'])){
         cocktail::removeCocktail($id);
@@ -40,15 +40,15 @@ if (!isSignedIn()) {
         
         $dataArray['error'] = 'Haluatko varmasti poistaa drinkin tietokannasta?';
         $dataArray['ingredients'] = $_POST['ingredient'];
-        showView('cocktailview.php', $dataArray);
+        showView('cocktailinfoview.php', $dataArray);
         
     }else if (isset($_POST['addingredientbutton'])) { 
         $_POST['ingredient'][] = '';
          $dataArray['ingredients'] = $_POST['ingredient'];
          $dataArray['editable'] = true;
-        showView('cocktailview.php', $dataArray);
+        showView('cocktailinfoview.php', $dataArray);
     }else if(isset($_POST['removebtns'])){
-         showView('cocktailview.php', $dataArray);
+         showView('cocktailinfoview.php', $dataArray);
     }
     
     else if (isset($_POST['savebutton'])) {    //the user has pressed the save button
