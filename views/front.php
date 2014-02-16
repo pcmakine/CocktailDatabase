@@ -2,29 +2,29 @@
     <link href="css/front.css" rel="stylesheet">
 </head>
 <div id = tableArea>
-        <input type="text" name="input" placeholder = "search for a drink">
+    <input type="text" name="input" placeholder = "search for a drink">
 
-        <table border="1">
+    <table border="1">
+        <tr>
+            <th>Nimi</th>
+            <th>Arvosana</th>
+            <th>Hinta euroa/annos</th>
+            <?php if ($data->accessrights): ?>
+                <th>Ehdotus</th>
+            <?php endif; ?>
+        </tr>
+
+        <?php foreach ($data->list as $cocktail) { ?>
             <tr>
-                <th>Nimi</th>
-                <th>Arvosana</th>
-                <th>Hinta euroa/annos</th>
+                <td><a href="cocktailinfo.php?id=<?php echo $cocktail->getId() ?>"><?php echo $cocktail->getName() ?></a></td>
+                <td><?php echo $cocktail->getRating(); ?></td>
+                <td><?php echo $cocktail->getPrice(); ?></td>
                 <?php if ($data->accessrights): ?>
-                    <th>Ehdotus</th>
+                    <td><?php echo $cocktail->getSuggestion(); ?></td>
                 <?php endif; ?>
             </tr>
-
-            <?php foreach ($data->list as $cocktail) { ?>
-                <tr>
-                    <td><a href="cocktailinfo.php?id=<?php echo $cocktail->getId() ?>"><?php echo $cocktail->getName() ?></a></td>
-                    <td><?php echo $cocktail->getRating(); ?></td>
-                    <td><?php echo $cocktail->getPrice(); ?></td>
-                    <?php if ($data->accessrights): ?>
-                        <td><?php echo $cocktail->getSuggestion(); ?></td>
-                    <?php endif; ?>
-                </tr>
-            <?php } ?> 
-        </table>
+        <?php } ?> 
+    </table>
 </div>
 
 <?php if ($data->page > 1): ?>
@@ -38,9 +38,9 @@
 Olet sivulla <?php echo $data->page; ?>/<?php echo $data->pagestotal; ?>.<br>
 
 <?php if ($data->accessrights): ?>
-<form name="submitnewdrink" action="addcocktail.php" method="POST">
-    <button type="submit" name="getSuggestionsButton"> Näytä vain ehdotukset </button>
-</form>
+    <form name="submitnewdrink" action="frontpage.php" method="GET">
+        <button type="submit" name="getAll"> Näytä kaikki </button>
+        <button type="submit" name="getSuggestions"> Näytä vain ehdotukset </button>
+    </form>
 
 <?php endif; ?>
-</form>

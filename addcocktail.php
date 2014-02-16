@@ -26,14 +26,7 @@ if (!isset($_POST["savebutton"])) {
     $cocktail->addCocktail();
     $cocktail->addRating($_SESSION['signedin'], $_POST["rating"]);
 
-    foreach ($_POST['ingredient'] as $name) {
-        if ($name != '') {
-            $ingredient = new ingredient(htmlspecialchars($name));
-            $ingredient->addIngredient();
-            $ingredient->linkIngredientWithCocktail($cocktail->getId());
-        }
-    }
-
+    ingredient::addAndLinkIngredients($_POST['ingredient'], $cocktail->getId());
 
     $_SESSION['announcement'] = "Drinkki lisätty onnistuneesti.";
     header('Location: frontpage.php');

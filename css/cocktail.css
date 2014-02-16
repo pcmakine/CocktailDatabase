@@ -3,19 +3,27 @@
     vertical-align:top
 }
 
+
 #recipe{
-    display:inline;
+    display:inline-block;
+    height:100%;
 }
 
 .alert{
     display:block;
 }
 
-button{
-    margin-top:5px;
-    margin-bottom:5px;
+
+.removebutton{
+    display:inline-block;
+    vertical-align:top
+}
+.button{
+    margin-top: 10px;
+    margin-bottom:10px;
 }
 
 label{
     display:block;
+    margin-top:10px;
 }

@@ -59,6 +59,22 @@ class cocktail {
         return $results;
     }
 
+    public function getSuggestions($limit, $page) {
+        $sql = "SELECT id, cocktailname, recipe, price, suggestion::int from cocktail where suggestion = ? order by cocktailname LIMIT ? OFFSET ?";
+
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute(array(1, $limit, ($page - 1) * $limit));
+
+        $results = array();
+        foreach ($query->fetchAll(PDO::FETCH_OBJ) as $result) {
+            $cocktail = new cocktail($result->id, $result->cocktailname, $result->recipe, $result->price, $result->suggestion);
+            //$array[] = $muuttuja; lisää muuttujan arrayn perään. 
+            //Se vastaa melko suoraan ArrayList:in add-metodia.
+            $results[] = $cocktail;
+        }
+        return $results;
+    }
+
     public function getSingleCocktail($id) {
         $sql = "SELECT * from cocktail where id = ?";
 
@@ -105,6 +121,19 @@ class cocktail {
         }
     }
 
+    public static function removeRatings($id) {
+        $sql = "delete from rating where cocktailid = ?";
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute(array($id));
+    }
+
+    public static function removeIngredients($id) {
+        $sql = "delete from cocktail_ingredient_link where cocktailid = ?";
+
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute(array($id));
+    }
+
     public function numofCocktails() {
         $sql = "SELECT COUNT(*) FROM cocktail";
 
@@ -121,6 +150,17 @@ class cocktail {
 
         $query = connection::getConnection()->prepare($sql);
         $query->execute(array(0));
+        $rows = $query->fetchColumn();
+
+        return $rows;
+    }
+
+    public function numofSuggestions() {
+
+        $sql = "SELECT COUNT(id) FROM cocktail where suggestion =?";
+
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute(array(1));
         $rows = $query->fetchColumn();
 
         return $rows;
@@ -167,6 +207,7 @@ class cocktail {
     public function getSuggestion() {
         return $this->suggestion;
     }
+
 }
 
 ?>

@@ -14,20 +14,26 @@ if (isset($_GET['page'])) {
 }
 $perpage = 3;
 
-$list;
+$list = array();
 $numofcocktails;
+$accessrights = getUserAccessRights();
 
-if(getUserAccessRights()){      //pääkäyttäjä
-    $list= cocktail::getCocktails($perpage, $page);
-    $numofcocktails = cocktail::numofCocktails();
-}else{
+if (!$accessrights) {   //tavallinen käyttäjä, näytä aina vain hyväksytyt drinkit
+    unset($list);
     $list = cocktail::getApprovedCocktails($perpage, $page);
     $numofcocktails = cocktail::numofApprovedCocktails();
+} else if(isset($_GET['getSuggestions'])) { //pääkäyttäjä, ei ole valinnut pelkästään ehdotuksia nähtäväkseen
+    
+        unset($list);
+    $list = cocktail::getSuggestions($perpage, $page);
+    $numofcocktails = cocktail::numofSuggestions();
+}else{
+    unset($list);
+    $list = cocktail::getCocktails($perpage, $page);
+    $numofcocktails = cocktail::numofCocktails();
 }
 
 $pagestotal = ceil($numofcocktails / $perpage);
-
-$accessrights = getUserAccessRights();
 
 if (isSignedIn()) {
     showView('front.php', array('title' => "frontpage",
@@ -39,5 +45,6 @@ if (isSignedIn()) {
 } else {
     header('Location: dologin.php');
 }
+
 
 
