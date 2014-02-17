@@ -1,6 +1,6 @@
 body{
     margin:10px;
-    
+
 }
 
 #mainlink:link{
@@ -10,9 +10,6 @@ body{
 #mainlink:hover{
     color:#539deb;
 }
-root { 
- 
-}
 
 h1{
     display:inline;
@@ -20,7 +17,6 @@ h1{
 }
 #header{
     margin-bottom: 20px;
-    
 }
 
 #signout{
