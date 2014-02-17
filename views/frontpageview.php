@@ -2,9 +2,9 @@
     <link href="css/front.css" rel="stylesheet">
 </head>
 <div id = tableArea>
-    <input type="text" name="input" placeholder = "search for a drink">
+    <input type="text" name="input" placeholder = "etsi drinkkejä">
 
-    <table border="1">
+    <table class="table table-striped table-bordered">
         <tr>
             <th>Nimi</th>
             <th>Arvosana</th>
@@ -20,27 +20,37 @@
                 <td><?php echo $cocktail->getRating(); ?></td>
                 <td><?php echo $cocktail->getPrice(); ?></td>
                 <?php if ($data->accessrights): ?>
-                    <td><?php echo $cocktail->getSuggestion(); ?></td>
+                    <td><?php echo $cocktail->getSuggestion() ? 'kyllä' : 'ei'; ?></td>
                 <?php endif; ?>
             </tr>
         <?php } ?> 
     </table>
 </div>
 
-<?php if ($data->page > 1): ?>
-    <a href="frontpage.php?page=<?php echo $data->page - 1; ?>">Edellinen sivu</a>
-<?php endif; ?>
-<?php if ($data->page < $data->pagestotal): ?>
-    <a href="frontpage.php?page=<?php echo $data->page + 1; ?>">Seuraava sivu</a>
-<?php endif; ?>
-
-<br>Yhteensä <?php echo $data->numofcocktails; ?> drinkkiä. 
-Olet sivulla <?php echo $data->page; ?>/<?php echo $data->pagestotal; ?>.<br>
+<div >  
+    <ul class="pagination">  
+        <?php if ($data->page > 1): ?>
+        <li><a href="frontpage.php?page=<?php echo($data->page-1)?>">Edellinen</a></li>
+        <?php endif; ?>
+        <?php for ($i = 1; $i < $data->pagestotal+1; $i++) { ?>          
+            <li <?php if ($data->page == $i): ?>     
+                    class="active"
+                <?php endif; ?>>  
+                <a href="frontpage.php?page=<?php echo$i?>"><?php echo $i ?></a>  
+            </li> 
+        <?php } 
+             if ($data->page < $data->pagestotal): ?>
+                <li><a href="frontpage.php?page=<?php echo($data->page+1)?>">Seuraava</a></li>
+            <?php endif; ?>
+    </ul>  
+</div>
+Yhteensä <?php echo $data->numofcocktails; ?> drinkkiä. 
+Olet sivulla <?php echo $data->page; ?>/<?php echo $data->pagestotal; ?>.
 
 <?php if ($data->accessrights): ?>
     <form name="submitnewdrink" action="frontpage.php" method="GET">
-        <button type="submit" name="getAll"> Näytä kaikki </button>
-        <button type="submit" name="getSuggestions"> Näytä vain ehdotukset </button>
+        <button class="btn btn-default"  type="submit" name="getAll"> Näytä kaikki </button>
+        <button class="btn btn-default"  type="submit" name="getSuggestions"> Näytä vain ehdotukset </button>
     </form>
 
 <?php endif; ?>

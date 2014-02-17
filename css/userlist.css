@@ -1,0 +1,19 @@
+button{
+    display:
+        block;
+}
+
+#tableArea{
+    display:inline-block;
+}
+
+#buttonArea{
+    display:inline-block;
+    vertical-align: top;
+}
+
+.lastcell{
+    border-color: transparent !important;
+    background-color: transparent !important;
+
+}

@@ -71,6 +71,12 @@ class user {
         }
     }
     
+    public function addAccessRights(){
+         $sql = "UPDATE users SET accessrights = ? WHERE username = ?";
+         $query = connection::getConnection()->prepare($sql);
+         $query->execute(array(1, $this->username));
+    }
+    
     public function createUser(){
         $sql = "insert into users(username, password, accessrights) values(?, ?, ?)";
         $query = connection::getConnection()->prepare($sql);

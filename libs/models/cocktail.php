@@ -91,7 +91,7 @@ class cocktail {
         $sql = "insert into cocktail(cocktailname, recipe, price, suggestion) values(?,?,?,?) returning id";
 
         $query = connection::getConnection()->prepare($sql);
-        $ok = $query->execute(array($this->name, $this->recipe, $this->price, $this->suggestion));
+        $ok = $query->execute(array($this->name, $this->recipe, $this->price, cocktail::booleanToSuggestionBit($this->suggestion)));
 
         if ($ok) {
             $this->id = $query->fetchColumn();

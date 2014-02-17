@@ -33,10 +33,12 @@
                     <?php } ?>>
                     <a href="addcocktail.php"><?php echo $addCocktailsText?> </a></li>
                 
+                <?php if($data->accessrights): ?>
                  <li <?php if ($page == 'userlistview.php') { ?>
                         class="active"
                     <?php } ?>>
                     <a href="userlist.php">Hallinnoi käyttäjiä</a></li>
+                 <?php endif; ?>
             </ul>
 
         </div>
