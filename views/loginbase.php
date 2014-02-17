@@ -13,8 +13,19 @@
         <div id = "container">
             <div id = "header">
                 <h1>Drinkkiarkisto</h1>
+                <?php if ($page == 'views/dologinview.php'): ?>
+                    <a id="registerlink" href="registration.php">Rekisteröidy</a>
+                <?php endif; ?>
                 <?php require $page; ?>
+
+                <?php
+                if (!empty($data->error)):
+                    ?>
+                    <div class="alert alert-danger"><?php echo $data->error; ?></div>
+                <?php endif; ?>
             </div>
+
+
         </div>
     </body>
 </html>

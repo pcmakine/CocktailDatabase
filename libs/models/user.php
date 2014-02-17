@@ -70,12 +70,35 @@ class user {
             return user::accessbitToBoolean($result->accessrights);
         }
     }
+    
+    public function createUser(){
+        $sql = "insert into users(username, password, accessrights) values(?, ?, ?)";
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute(array($this->username, $this->password, user::booleanToAccessbit($this->accessrights)));
+    }
+    
+    public function userExists(){
+        $sql = "SELECT count (username) from users where username = ?";
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute(array($this->username));
+        
+        $result = $query->fetchColumn();
+        return $result > 0;
+    }
 
     public static function accessbitToBoolean($bit) {
         if ($bit == 1) {
             return true;
         } else {
             return false;
+        }
+    }
+    
+    public static function booleanToAccessbit($access){
+        if($access){
+            return 1;
+        }else{
+            return 0;
         }
     }
 

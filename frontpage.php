@@ -22,12 +22,11 @@ if (!$accessrights) {   //tavallinen käyttäjä, näytä aina vain hyväksytyt 
     unset($list);
     $list = cocktail::getApprovedCocktails($perpage, $page);
     $numofcocktails = cocktail::numofApprovedCocktails();
-} else if(isset($_GET['getSuggestions'])) { //pääkäyttäjä, ei ole valinnut pelkästään ehdotuksia nähtäväkseen
-    
-        unset($list);
+} else if (isset($_GET['getSuggestions'])) { //pääkäyttäjä, ei ole valinnut pelkästään ehdotuksia nähtäväkseen
+    unset($list);
     $list = cocktail::getSuggestions($perpage, $page);
     $numofcocktails = cocktail::numofSuggestions();
-}else{
+} else {
     unset($list);
     $list = cocktail::getCocktails($perpage, $page);
     $numofcocktails = cocktail::numofCocktails();

@@ -16,7 +16,7 @@ class cocktail {
         $this->name = trim($name);
         $this->recipe = trim($recipe);
         $this->price = $price;
-        $this->suggestion = $suggestion;
+        $this->suggestion = cocktail::suggestionbitToBoolean($suggestion);
         $this->setAvgRating();
         $this->fixEmptyAttributes();
     }
@@ -106,11 +106,12 @@ class cocktail {
         $query->execute(array($id));
     }
 
-    public function updateCocktail($id, $name, $recipe, $price) {
-        $sql = "UPDATE cocktail SET cocktailname = ?, recipe = ?, price = ? WHERE id = ?";
+    public function updateCocktail($id, $name, $recipe, $price, $suggestion) {
+        $sql = "UPDATE cocktail SET cocktailname = ?, recipe = ?, price = ?, suggestion = ? WHERE id = ?";
         $query = connection::getConnection()->prepare($sql);
 
-        $query->execute(array($name, $recipe, $price, $id));
+       $ok = $query->execute(array($name, $recipe, $price, cocktail::booleanToSuggestionBit($suggestion), $id));
+     
     }
 
     public function addRating($username, $rating) {
@@ -181,6 +182,22 @@ class cocktail {
             $this->rating = "ei vielä arvosteltu";
         } else {
             $this->rating = ($sumofratings / $rows);
+        }
+    }
+
+    public static function suggestionbitToBoolean($bit) {
+        if ($bit == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function booleanToSuggestionBit($suggestion) {
+        if ($suggestion) {
+            return 1;
+        } else {
+            return 0;
         }
     }
 

@@ -1,6 +1,19 @@
-body {
-    margin:0px;
-    padding:0px;
+
+h1{
+    display:inline;
+}
+
+h4{
+    margin-left:10px;
+}
+
+#registerlink{
+    float:right;
+    color:white;
+}
+
+#registerlink:hover{
+    color:purple;
 }
 
 #header{
@@ -8,10 +21,7 @@ body {
     color:white;
     padding: 10px;  
     padding-bottom: 5px;
-}
 
-h1{
-    display:inline;
 }
 
 .alert{
@@ -24,3 +34,6 @@ h1{
     width:40%;
 }
 
+label{
+    margin-left:10px;
+}
