@@ -22,7 +22,7 @@
         <label for="rating"> Arvosana: </label><input type="text" name="rating" id="rating" value="<?php echo $data->cocktail->getRating() ?>"
                                                       pattern="[1-5]" title="Arvosanan täytyy olla välillä 1-5" readonly>
         <?php if($data->accessrights): ?>
-        <label for="suggestion">Ehdotus?</label><input type="text" name="suggestion" id="suggestion"
+        <label for="suggestion">Ehdotus</label><input type="text" name="suggestion" id="suggestion"
                                                        value="<?php echo ($data->cocktail->getSuggestion()) ? 'kyllä' : 'ei'?>" readonly>
         <?php endif; ?>
     </div>

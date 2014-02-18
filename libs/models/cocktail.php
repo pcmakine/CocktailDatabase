@@ -16,7 +16,12 @@ class cocktail {
         $this->name = trim($name);
         $this->recipe = trim($recipe);
         $this->price = $price;
-        $this->suggestion = cocktail::suggestionbitToBoolean($suggestion);
+        if (is_numeric($suggestion)) {
+            $this->suggestion = cocktail::suggestionbitToBoolean($suggestion);
+        }else{
+            $this->suggestion = $suggestion;
+        }
+
         $this->setAvgRating();
         $this->fixEmptyAttributes();
     }
@@ -108,10 +113,12 @@ class cocktail {
 
     public function updateCocktail($id, $name, $recipe, $price, $suggestion) {
         $sql = "UPDATE cocktail SET cocktailname = ?, recipe = ?, price = ?, suggestion = ? WHERE id = ?";
+        if($price == ''){
+            $price = null;
+        }
         $query = connection::getConnection()->prepare($sql);
 
-       $ok = $query->execute(array($name, $recipe, $price, cocktail::booleanToSuggestionBit($suggestion), $id));
-     
+        $ok = $query->execute(array($name, $recipe, $price, cocktail::booleanToSuggestionBit($suggestion), $id));
     }
 
     public function addRating($username, $rating) {
