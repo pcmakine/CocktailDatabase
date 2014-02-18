@@ -27,7 +27,7 @@ class user {
     }
 
     public static function getUsers() {
-        $sql = "SELECT username,password, accessrights::int from users";
+        $sql = "SELECT username,password, accessrights::int from users order by username";
 
         $query = connection::getConnection()->prepare($sql);
         $query->execute();
@@ -71,10 +71,10 @@ class user {
         }
     }
     
-    public function addAccessRights(){
+    public function updateAccessRights($newRights){
          $sql = "UPDATE users SET accessrights = ? WHERE username = ?";
          $query = connection::getConnection()->prepare($sql);
-         $query->execute(array(1, $this->username));
+         $query->execute(array($newRights, $this->username));
     }
     
     public function createUser(){

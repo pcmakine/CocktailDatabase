@@ -12,22 +12,30 @@ if (!isSignedIn()) {
     header('Location: dologin.php');
 } else if (getUserAccessRights()) {
     $user;
+    $announcement;
     if (isset($_POST['addRights'])) {
-        foreach ($_POST['addRights'] as $buttonid) {
-            if (isset($buttonid)) {
-                $user = $list[$buttonid];
-                $user->addAccessRights();
-                $list = user::getUsers();
-                $data['list'] = $list;
-            }
-        }
-        $_SESSION['announcement'] = "Ylläpito-oikeudet lisätty käyttäjälle " . $user->getUsername();
+        $user = $list[getPressedButton($_POST['addRights'])];
+        $user->updateAccessRights(1);
+        $announcement = "Ylläpito-oikeudet lisätty käyttäjälle " . $user->getUsername();
+    } else if (isset($_POST['removeRights'])) {
+        $user = $list[getPressedButton($_POST['removeRights'])];
+        $user->updateAccessRights(0);
+        $announcement = "Ylläpito-oikeudet poistettu käyttäjältä " . $user->getUsername();
     }
-    
+
+    $list = user::getUsers();
+    $data['list'] = $list;
+    $_SESSION['announcement'] = $announcement;
     showView('userlistview.php', $data);
 } else {
     header('Location: frontpage.php');
 }
 
-
+function getPressedButton($array) {
+    foreach ($array as $buttonid) {
+        if (isset($buttonid)) {
+            return $buttonid;
+        }
+    }
+}
 
