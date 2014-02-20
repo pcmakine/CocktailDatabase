@@ -1,9 +1,18 @@
 <!DOCTYPE html>
-<form name="input" action="dologin.php" method="POST">
-    <label for="user">Käyttäjänimi:</label> <input id ="user" type="text" value="<?php echo $data->user; ?>"name="user">
-    <label for="password">Salasana:</label> <input id="password" type="password" name="password">
-    <button type="submit" name="submitbutton">Login</button>
-</form>
+<div class="container">
+    <form name="input" action="dologin.php" method="POST">
 
+        <div class="form-group">
+            <label class="control-label" for="user">Käyttäjänimi</label>
+            <input type="text" class="form-control" id="user" placeholder="käyttäjänimi" name="user" value="<?php echo $data->user; ?>">
+        </div>
 
-</html>
+        <div class="form-group">
+            <label for="password">Salasana</label>
+            <input type="password" class="form-control" id="password" placeholder="Salasana" name="password">
+        </div>
+
+        <button type="submitbutton" class="btn btn-primary" name="submitbutton">Kirjaudu</button>
+        <button type="submitbutton" class="btn btn-default" name="registerbutton">Rekisteröidy</button>
+    </form>
+</div>

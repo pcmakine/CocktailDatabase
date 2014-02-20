@@ -1,44 +1,25 @@
-body{margin: 10px}
-#tableArea{margin: 50px}
-#newDrinkTable{margin: 50px}
-
-input{
-    margin: 10px;
+.alert{
+    margin-top:10px;
 }
 
-button{
-    margin-top: 10px;
+#mainlink:link{
+    color:black;
 }
 
-label{
-    float: left;
-    width: 100px;
-    margin: 10px;
+#mainlink:hover{
+    color:#539deb;
 }
 
-#textarea{
-    overflow: auto;
-}
-
-#info{
-   float:left;
-}
-
-#infoboxes{
-    float:left;
-}
-
-.infofields{
-    margin-right: 35em;
+#signout{
     float:right;
+    margin-right:1em;
+    margin-top:5px;
 }
 
-.recipe{
-    float:left;
+#navtabs{
+    display:inline-block;
 }
 
-.container{
-    padding:0px 0;
-    width: 960px;
-    margin: 0 auto;
+.content{
+    margin-top: 1em;
 }

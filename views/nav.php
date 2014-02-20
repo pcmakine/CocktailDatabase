@@ -4,13 +4,12 @@
         <title>Drinkkiarkisto</title>
         <link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/bootstrap-theme.css" rel="stylesheet">
-        <link href="css/nav.css" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
     </head>
 
     <body>
-
         <?php
         if ($data->accessrights) {
             $addCocktailsText = 'Lisää drinkkejä tietokantaan';

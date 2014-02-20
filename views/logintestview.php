@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<div class="bs-example">
+<div class="container">
     <form>
         <div class="form-group">
-            <label for="inputEmail">Email</label>
-            <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+            <label class="control-label" for="user">Käyttäjänimi</label>
+            <input type="text" class="form-control" id="user" placeholder="käyttäjänimi" name="user">
         </div>
         <div class="form-group">
-            <label for="inputPassword">Password</label>
-            <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+            <label for="password">Salasana</label>
+            <input type="password" class="form-control" id="password" placeholder="Salasana" name="password">
         </div>
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submitbutton" class="btn btn-primary" name="submitbutton">Login</button>
     </form>
 </div>

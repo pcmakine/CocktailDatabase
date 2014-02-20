@@ -1,29 +1,17 @@
-.ingredientfields, .infofields{
+ingredientfields, .infofields{
     display:inline-block;
-    vertical-align:top
 }
-
 
 #recipe{
     display:inline-block;
-    height:100%;
 }
 
 .alert{
     display:block;
 }
 
-
-.removebutton{
-    display:inline-block;
-    vertical-align:top
-}
-.button{
-    margin-top: 10px;
-    margin-bottom:10px;
+.btn{
+    margin-bottom: 10px;
 }
 
-label{
-    display:block;
-    margin-top:10px;
-}
+

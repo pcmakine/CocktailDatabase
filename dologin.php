@@ -7,6 +7,10 @@ if(isSignedIn()){
     header('Location: frontpage.php');
 }
 
+if(isset($_POST['registerbutton'])){
+    header('Location: registration.php');
+}
+
 if(!isset($_POST['submitbutton'])){     //show normal login screen if the user hasn't yet pressed the login button
     showLoginScreen('views/dologinview.php', array(
         'title' => 'login'));
