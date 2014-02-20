@@ -2,7 +2,6 @@
 <head>
     <link href="css/cocktail.css" rel="stylesheet">
 </head>
-<div class="container">
 <form name="edit" action="cocktailinfo.php?id=<?php echo $data->cocktail->getId() ?>" method="POST">
     <div class="row">
         <div class="col-xs-4">
@@ -82,11 +81,10 @@
         <div class="alert alert-danger"> 
             <?php echo $data->error; ?><br>
             <button class="btn btn-default" type ="submit" name="confirmremove" id="remove">Kyllä</button>
-            <button class="btn btn-default" type ="submit" name="cancelremove" id="remove">Peruuta</button>
+            <button class="btn btn-default" type ="submit" name="cancelremove" id="cancelremove">Peruuta</button>
         </div>
 
     </form>
 <?php endif; ?>
-</div>
 
 

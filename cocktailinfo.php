@@ -39,7 +39,8 @@ if (!isSignedIn()) {
         $dataArray['ingredients'] = $_POST['ingredient'];
         $dataArray['editable'] = true;
         showView('cocktailinfoview.php', $dataArray);
-    } else if (isset($_POST['removebtns'])) {
+   
+        } else if (isset($_POST['removebtns'])) {
         foreach ($_POST['removebtns'] as $buttonid) {
             if (isset($buttonid)) {
                 $_POST['ingredient'] = (array_diff($_POST['ingredient'], array($_POST['ingredient'][$buttonid])));

@@ -11,16 +11,18 @@
     </head>
     <body>
         <div class = "container">
-                <h1><a id="mainlink" href="dologin.php">Drinkkiarkisto</a></h1>
+            <h1><a id="mainlink" href="dologin.php">Drinkkiarkisto</a></h1>
 
-                <?php require $page; ?>
+            <?php require $page; ?>
 
-                <?php
-                if (!empty($data->error)):
-                    ?>
-                    <div class="alert alert-danger"><?php echo $data->error; ?></div>
-                <?php endif; ?>
-
+            <?php
+            if (!empty($data->error)):
+                ?>
+                <div class="alert alert-danger"><?php echo $data->error; ?></div>
+            <?php endif; ?>
+            <div class ="alert alert-warning">
+                <?php echo 'Otathan huomioon että salasanat tallennetaan tietokantaan selväkielisinä'; ?><br>
+            </div>
         </div>
     </body>
 </html>

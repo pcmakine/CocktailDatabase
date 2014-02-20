@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<?php if ($page == 'views/registrationview.php'): ?>
     <a id="loginlink" href="dologin.php">&#171;-Takaisin kirjautumissivulle</a>
     <h4><b>Rekisteröityminen</h4>
-<?php endif; ?>
 
 <form name="input" action="registration.php" method="POST">
 

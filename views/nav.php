@@ -32,18 +32,26 @@
                     <?php } ?>>
                     <a href="addcocktail.php"><?php echo $addCocktailsText ?> </a></li>
 
-                <?php if ($data->accessrights): ?>
+                <?php if ($data->accessrights) { ?>
                     <li <?php if ($page == 'userlistview.php') { ?>
                             class="active"
                         <?php } ?>>
                         <a href="userlist.php">Hallinnoi käyttäjiä</a></li>
-                <?php endif; ?>
+                <?php } ?>
+                <li <?php if ($page == 'changepasswordview.php') { ?>
+                        class="active"
+                    <?php } ?>>
+                    <a href="changepassword.php">Muokkaa tietojasi</a></li>
             </ul>
 
         </div>
-        <div class="content">
+        <div class="container">
 
             <?php require $page; ?>
+
+            <?php if (!empty($data->error)): ?>
+                <div class="alert alert-danger"><?php echo $data->error; ?></div>
+            <?php endif; ?>
 
             <?php if (!empty($_SESSION['announcement'])): ?>
                 <div class="alert alert-success">

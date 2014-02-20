@@ -1,4 +1,3 @@
-<div class="container">
     <div id = tableArea>
         <input type="text" name="input" placeholder = "etsi drinkkejä">
 
@@ -54,4 +53,3 @@
         </form>
 
 <?php endif; ?>
-</div>
