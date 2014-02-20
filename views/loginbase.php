@@ -12,17 +12,18 @@
     <body>
         <div class = "container">
             <h1><a id="mainlink" href="dologin.php">Drinkkiarkisto</a></h1>
-
             <?php require $page; ?>
-
             <?php
             if (!empty($data->error)):
                 ?>
                 <div class="alert alert-danger"><?php echo $data->error; ?></div>
             <?php endif; ?>
-            <div class ="alert alert-warning">
-                <?php echo 'Otathan huomioon että salasanat tallennetaan tietokantaan selväkielisinä'; ?><br>
-            </div>
+            <?php if ($page == 'views/registrationview.php'): ?>
+                <div class ="alert alert-warning">
+                    <?php echo 'Otathan huomioon että salasanat tallennetaan tietokantaan selväkielisinä'; ?><br>
+                </div>
+            <?php endif; ?>
+
         </div>
     </body>
 </html>

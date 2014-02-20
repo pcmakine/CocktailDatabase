@@ -1,55 +1,63 @@
-    <div id = tableArea>
-        <input type="text" name="input" placeholder = "etsi drinkkejä">
+<div id = tableArea>
+    <form action="frontpage.php" method="POST">
+        <div class ="input-group">
+            <input class="form-control" type="text" name="input" placeholder = "etsi drinkkejä">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-default" name="search">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
+        </div>
+    </form>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>Nimi</th>
+            <th>Arvosana</th>
+            <th>Hinta euroa/annos</th>
+            <?php if ($data->accessrights): ?>
+                <th>Ehdotus</th>
+            <?php endif; ?>
+        </tr>
 
-        <table class="table table-striped table-bordered">
+        <?php foreach ($data->list as $cocktail) { ?>
             <tr>
-                <th>Nimi</th>
-                <th>Arvosana</th>
-                <th>Hinta euroa/annos</th>
+                <td><a href="cocktailinfo.php?id=<?php echo $cocktail->getId() ?>"><?php echo $cocktail->getName() ?></a></td>
+                <td><?php echo $cocktail->getRating(); ?></td>
+                <td><?php echo $cocktail->getPrice(); ?></td>
                 <?php if ($data->accessrights): ?>
-                    <th>Ehdotus</th>
+                    <td><?php echo $cocktail->getSuggestion() ? 'kyllä' : 'ei'; ?></td>
                 <?php endif; ?>
             </tr>
+        <?php } ?> 
+    </table>
+</div>
 
-            <?php foreach ($data->list as $cocktail) { ?>
-                <tr>
-                    <td><a href="cocktailinfo.php?id=<?php echo $cocktail->getId() ?>"><?php echo $cocktail->getName() ?></a></td>
-                    <td><?php echo $cocktail->getRating(); ?></td>
-                    <td><?php echo $cocktail->getPrice(); ?></td>
-                    <?php if ($data->accessrights): ?>
-                        <td><?php echo $cocktail->getSuggestion() ? 'kyllä' : 'ei'; ?></td>
-                    <?php endif; ?>
-                </tr>
-            <?php } ?> 
-        </table>
-    </div>
-
-    <div >  
-        <ul class="pagination">  
-            <?php if ($data->page > 1): ?>
-                <li><a href="frontpage.php?page=<?php echo($data->page - 1) ?>">Edellinen</a></li>
-            <?php endif; ?>
-            <?php for ($i = 1; $i < $data->pagestotal + 1; $i++) { ?>          
-                <li <?php if ($data->page == $i): ?>     
-                        class="active"
-                    <?php endif; ?>>  
-                    <a href="frontpage.php?page=<?php echo$i ?>"><?php echo $i ?></a>  
-                </li> 
+<div >  
+    <ul class="pagination">  
+        <?php if ($data->page > 1): ?>
+            <li><a href="frontpage.php?page=<?php echo($data->page - 1) ?>">Edellinen</a></li>
+        <?php endif; ?>
+        <?php for ($i = 1; $i < $data->pagestotal + 1; $i++) { ?>          
+            <li <?php if ($data->page == $i): ?>     
+                    class="active"
+                <?php endif; ?>>  
+                <a href="frontpage.php?page=<?php echo$i ?>"><?php echo $i ?></a>  
+            </li> 
             <?php
-            }
-            if ($data->page < $data->pagestotal):
-                ?>
-                <li><a href="frontpage.php?page=<?php echo($data->page + 1) ?>">Seuraava</a></li>
-<?php endif; ?>
-        </ul>  
-    </div>
-    Yhteensä <?php echo $data->numofcocktails; ?> drinkkiä. 
-    Olet sivulla <?php echo $data->page; ?>/<?php echo $data->pagestotal; ?>.
+        }
+        if ($data->page < $data->pagestotal):
+            ?>
+            <li><a href="frontpage.php?page=<?php echo($data->page + 1) ?>">Seuraava</a></li>
+        <?php endif; ?>
+    </ul>  
+</div>
+Yhteensä <?php echo $data->numofcocktails; ?> drinkkiä. 
+Olet sivulla <?php echo $data->page; ?>/<?php echo $data->pagestotal; ?>.
 
 <?php if ($data->accessrights): ?>
-        <form name="submitnewdrink" action="frontpage.php" method="GET">
-            <button class="btn btn-default"  type="submit" name="getAll"> Näytä kaikki </button>
-            <button class="btn btn-default"  type="submit" name="getSuggestions"> Näytä vain ehdotukset </button>
-        </form>
+    <form name="submitnewdrink" action="frontpage.php" method="GET">
+        <button class="btn btn-default"  type="submit" name="getAll"> Näytä kaikki </button>
+        <button class="btn btn-default"  type="submit" name="getSuggestions"> Näytä vain ehdotukset </button>
+    </form>
 
 <?php endif; ?>
