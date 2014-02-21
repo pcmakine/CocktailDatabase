@@ -18,7 +18,7 @@ class cocktail {
         $this->price = $price;
         if (is_numeric($suggestion)) {
             $this->suggestion = cocktail::suggestionbitToBoolean($suggestion);
-        }else{
+        } else {
             $this->suggestion = $suggestion;
         }
 
@@ -92,6 +92,34 @@ class cocktail {
         return $cocktail;
     }
 
+    public static function searchForCocktail($searchterm, $limit, $page, $onlysuggestions) {
+        if($searchterm == ''){
+            return self::getCocktails($limit, $page);
+        }
+        $sql;
+        $searchterm = "%" . $searchterm . "%";
+        $array = array( $searchterm , $limit, (($page - 1) * $limit));
+        if($onlysuggestions){
+            $sql = "SELECT * from cocktail where suggestion = ? and lower(cocktailname) like lower(?) order by cocktailname LIMIT ? OFFSET ?";
+            $array = array(1, $searchterm, $limit, (($page - 1) * $limit));
+        }else{
+            $sql = "SELECT * from cocktail where lower(cocktailname) like lower(?) order by cocktailname LIMIT ? OFFSET ?";
+        }
+        
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute($array);
+        
+        $results = array();
+        foreach ($query->fetchAll(PDO::FETCH_OBJ) as $result) {
+            $cocktail = new cocktail($result->id, $result->cocktailname, $result->recipe, $result->price, $result->suggestion);
+            //$array[] = $muuttuja; lisää muuttujan arrayn perään. 
+            //Se vastaa melko suoraan ArrayList:in add-metodia.
+            $results[] = $cocktail;
+        }
+        return $results;
+        
+    }
+
     public function addCocktail() {
         $sql = "insert into cocktail(cocktailname, recipe, price, suggestion) values(?,?,?,?) returning id";
 
@@ -113,7 +141,7 @@ class cocktail {
 
     public function updateCocktail($id, $name, $recipe, $price, $suggestion) {
         $sql = "UPDATE cocktail SET cocktailname = ?, recipe = ?, price = ?, suggestion = ? WHERE id = ?";
-        if($price == ''){
+        if ($price == '') {
             $price = null;
         }
         $query = connection::getConnection()->prepare($sql);

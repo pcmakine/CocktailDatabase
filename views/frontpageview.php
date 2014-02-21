@@ -1,9 +1,9 @@
 <div id = tableArea>
-    <form action="frontpage.php" method="POST">
+    <form action="frontpage.php" method="GET">
         <div class ="input-group">
-            <input class="form-control" type="text" name="input" placeholder = "etsi drinkkejä">
+            <input class="form-control" type="text" name="search" value="<?php echo $data->searchterm ?>">
             <span class="input-group-btn">
-                <button type="submit" class="btn btn-default" name="search">
+                <button type="submit" class="btn btn-default" name="searchbutton">
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
             </span>
