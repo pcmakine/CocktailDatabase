@@ -1,6 +1,7 @@
 <?php
 
 require_once "connection.php";
+require_once "database.php";
 
 class user {
 
@@ -26,20 +27,15 @@ class user {
         return $this->accessrights;
     }
 
+    public static function createNewOne($result) {
+        $user = new user($result->username, $result->password, $result->accessrights);
+        return $user;
+    }
+
     public static function getUsers() {
         $sql = "SELECT username,password, accessrights::int from users order by username";
-
-        $query = connection::getConnection()->prepare($sql);
-        $query->execute();
-
-        $results = array();
-        foreach ($query->fetchAll(PDO::FETCH_OBJ) as $result) {
-            $user = new user($result->username, $result->password, $result->accessrights);
-            //$array[] = $muuttuja; lisää muuttujan arrayn perään. 
-            //Se vastaa melko suoraan ArrayList:in add-metodia.
-            $results[] = $user;
-        }
-        return $results;
+        $array = array();
+        return database::getList($sql, $array, 'user');
     }
 
     public static function getSingleUser($user, $userpsw) {
@@ -70,30 +66,30 @@ class user {
             return user::accessbitToBoolean($result->accessrights);
         }
     }
-    
-    public function updateAccessRights($newRights){
-         $sql = "UPDATE users SET accessrights = ? WHERE username = ?";
-         $query = connection::getConnection()->prepare($sql);
-         $query->execute(array($newRights, $this->username));
+
+    public function updateAccessRights($newRights) {
+        $sql = "UPDATE users SET accessrights = ? WHERE username = ?";
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute(array($newRights, $this->username));
     }
-    
-    public static function changePassword($password, $username){
+
+    public static function changePassword($password, $username) {
         $sql = "UPDATE users SET password = ? WHERE username = ?";
         $query = connection::getConnection()->prepare($sql);
         $query->execute(array($password, $username));
     }
-    
-    public function createUser(){
+
+    public function createUser() {
         $sql = "insert into users(username, password, accessrights) values(?, ?, ?)";
         $query = connection::getConnection()->prepare($sql);
         $query->execute(array($this->username, $this->password, user::booleanToAccessbit($this->accessrights)));
     }
-    
-    public function userExists(){
+
+    public function userExists() {
         $sql = "SELECT count (username) from users where username = ?";
         $query = connection::getConnection()->prepare($sql);
         $query->execute(array($this->username));
-        
+
         $result = $query->fetchColumn();
         return $result > 0;
     }
@@ -105,11 +101,11 @@ class user {
             return false;
         }
     }
-    
-    public static function booleanToAccessbit($access){
-        if($access){
+
+    public static function booleanToAccessbit($access) {
+        if ($access) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
     }

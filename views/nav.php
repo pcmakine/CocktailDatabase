@@ -41,7 +41,7 @@
                 <li <?php if ($page == 'changepasswordview.php') { ?>
                         class="active"
                     <?php } ?>>
-                    <a href="changepassword.php">Muokkaa tietojasi</a></li>
+                    <a href="changepassword.php">Vaihda salasana</a></li>
             </ul>
 
         </div>

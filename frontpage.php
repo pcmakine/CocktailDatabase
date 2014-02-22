@@ -3,6 +3,11 @@
 require_once 'libs/common.php';
 require_once 'libs/models/cocktail.php';
 
+if (!isSignedIn()) {
+
+    header('Location: dologin.php');
+}
+
 $page = 1;
 
 if (isset($_GET['page'])) {
@@ -18,38 +23,39 @@ $list = array();
 $numofcocktails;
 $accessrights = getUserAccessRights();
 $searchterm = htmlspecialchars(trim($_GET['search']));
+$restriction = 'getAll=';
+$orderby = makeSafe(htmlspecialchars(trim($_GET['orderby'])));
+if ($orderby == '') {
+    $orderby = "cocktailname";
+}
 
-if (!$accessrights) {   //tavallinen käyttäjä, näytä aina vain hyväksytyt drinkit
-    unset($list);
-    $list = cocktail::getApprovedCocktails($perpage, $page);
+if (!$accessrights) {   //tavallinen käyttäjä, näytä aina vain hyväksytyt drinkit. Tietokantahaku ottaa myös hakusanan huomioon
+    $list = cocktail::getApprovedCocktails($searchterm, $perpage, $page);
     $numofcocktails = cocktail::numofApprovedCocktails();
-} else if (isset($_GET['getSuggestions'])) { //pääkäyttäjä, ei ole valinnut pelkästään ehdotuksia nähtäväkseen
-    unset($list);
-    $list = cocktail::searchForCocktail($searchterm, $perpage, $page, TRUE);
-    $numofcocktails = cocktail::numofSuggestions();
+} else if (isset($_GET['getSuggestions'])) { //pääkäyttäjä, joka on valinnut nähtäväkseen vain ehdotukset
+    $list = cocktail::getSuggestions($searchterm, $perpage, $page);
+    $numofcocktails = cocktail::numofSuggestions($searchterm);
+    $restriction = 'getSuggestions=';
 } else {
-    unset($list);
-    $list = cocktail::searchForCocktail($searchterm, $perpage, $page, FALSE);
-    $numofcocktails = cocktail::numofCocktails();
+    $list = cocktail::getCocktails($searchterm, $orderby, $perpage, $page);
+    $numofcocktails = cocktail::numofCocktails($searchterm);
 }
 
 $pagestotal = ceil($numofcocktails / $perpage);
 
-if (!isSignedIn()) {
+showView('frontpageview.php', array('title' => "frontpage",
+    'list' => $list,
+    'page' => $page,
+    'pagestotal' => $pagestotal,
+    'numofcocktails' => $numofcocktails,
+    'accessrights' => $accessrights,
+    'searchterm' => $searchterm,
+    'restriction' => $restriction,
+    'orderby' => $orderby));
 
-    header('Location: dologin.php');
-} else {
-
-    showView('frontpageview.php', array('title' => "frontpage",
-        'list' => $list,
-        'page' => $page,
-        'pagestotal' => $pagestotal,
-        'numofcocktails' => $numofcocktails,
-        'accessrights' => $accessrights,
-        'searchterm' => $searchterm));
-    
-    
+function makeSafe($orderby) {
+    if ($orderby != 'cocktailname' && $orderby != 'rating' && $orderby != 'price') {
+        return 'cocktailname';
+    }
+    return $orderby;
 }
-
-
-
