@@ -25,5 +25,18 @@ class database {
         return $rows;
     }
 
+    function nonReturningExecution($sql, $array) {
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute($array);
+    }
+
+    function getSingle($sql, $array, $class) {
+        $query = connection::getConnection()->prepare($sql);
+        $query->execute($array);
+        
+        $result = $query->fetchObject();
+        return $class::createNewOne($result);
+    }
+
 }
 

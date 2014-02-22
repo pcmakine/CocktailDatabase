@@ -19,6 +19,10 @@ function signIn($uname) {
     header('Location: frontpage.php');
 }
 
+function getUserName(){
+    return $_SESSION['signedin'];
+}
+
 function isSignedIn() {
     return isset($_SESSION['signedin']);
 }

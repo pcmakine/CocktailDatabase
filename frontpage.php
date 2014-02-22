@@ -25,19 +25,23 @@ $accessrights = getUserAccessRights();
 $searchterm = htmlspecialchars(trim($_GET['search']));
 $restriction = 'getAll=';
 $orderby = makeSafe(htmlspecialchars(trim($_GET['orderby'])));
+$orderdir = makeDirSafe(htmlspecialchars(trim($_GET['orderdir'])));
+$nextdir = reverseDir($orderdir);
+
+
 if ($orderby == '') {
     $orderby = "cocktailname";
 }
 
 if (!$accessrights) {   //tavallinen käyttäjä, näytä aina vain hyväksytyt drinkit. Tietokantahaku ottaa myös hakusanan huomioon
-    $list = cocktail::getApprovedCocktails($searchterm, $perpage, $page);
-    $numofcocktails = cocktail::numofApprovedCocktails();
+    $list = cocktail::getApprovedCocktails($searchterm, $orderby, $orderdir, $perpage, $page);
+    $numofcocktails = cocktail::numofApprovedCocktails($searchterm);
 } else if (isset($_GET['getSuggestions'])) { //pääkäyttäjä, joka on valinnut nähtäväkseen vain ehdotukset
-    $list = cocktail::getSuggestions($searchterm, $perpage, $page);
+    $list = cocktail::getSuggestions($searchterm, $orderby, $orderdir, $perpage, $page);
     $numofcocktails = cocktail::numofSuggestions($searchterm);
     $restriction = 'getSuggestions=';
 } else {
-    $list = cocktail::getCocktails($searchterm, $orderby, $perpage, $page);
+    $list = cocktail::getCocktails($searchterm, $orderby, $orderdir, $perpage, $page);
     $numofcocktails = cocktail::numofCocktails($searchterm);
 }
 
@@ -51,11 +55,27 @@ showView('frontpageview.php', array('title' => "frontpage",
     'accessrights' => $accessrights,
     'searchterm' => $searchterm,
     'restriction' => $restriction,
-    'orderby' => $orderby));
+    'orderby' => $orderby,
+    'nextdir' => $nextdir,
+    'orderdir' => $orderdir));
 
 function makeSafe($orderby) {
     if ($orderby != 'cocktailname' && $orderby != 'rating' && $orderby != 'price') {
         return 'cocktailname';
     }
     return $orderby;
+}
+
+function makeDirSafe($orderdir){
+    if($orderdir != 'asc' && $orderdir != 'desc'){
+        return 'asc';
+    }
+    return $orderdir;
+}
+
+function reverseDir($dir){
+    if($dir == 'desc'){
+        return 'asc';
+    }
+    return 'desc';
 }

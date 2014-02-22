@@ -54,8 +54,15 @@ if (!isSignedIn()) {
     } else if (isset($_POST['savebutton'])) {    //the user has pressed the save button
         cocktail::removeIngredients($id);
         ingredient::addAndLinkIngredients($_POST['ingredient'], $id);
+        $cocktail->addRating(getUserName(), $_POST['rating']);
         cocktail::updateCocktail($id, htmlspecialchars($_POST['name']), htmlspecialchars($_POST['recipe']), $_POST['price'], $cocktail->getSuggestion());
-        $_SESSION['announcement'] = 'Drinkin muokkaus onnistui!';
+        
+        if(getUserAccessRights()){
+            $_SESSION['announcement'] = 'Drinkin muokkaus onnistui!';
+        }else{
+            $_SESSION['announcement'] = 'Arvosana tallennettu!';
+        }
+       
         header('Location: frontpage.php');
     } else if (isset($_POST['acceptsuggestion'])) {
         var_dump("hyväksytty!");
