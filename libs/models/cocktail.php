@@ -4,7 +4,7 @@ require_once "connection.php";
 require_once "database.php";
 
 /**
- * Cocktail luokan malli, joka tarjoaa palveluita drinkkien lisäämiseen, poistamiseen ja muokkaamiseen.
+ * Cocktail taulun malli, joka tarjoaa palveluita drinkkien lisäämiseen, poistamiseen ja muokkaamiseen.
  * Myös drinkkien arvosanoja voi luokata tämän luokan metodien avulla.
  */
 class cocktail {
@@ -271,13 +271,18 @@ class cocktail {
     /**
      * tekee uuden drinkkiolion
      * @param type $result  olio josta luotavan olion tiedot löytyvät
-     * @return \cocktail
+     * @return palauttaa luomansa olion
      */
     public static function createNewOne($result) {
         $cocktail = new cocktail($result->id, $result->cocktailname, $result->recipe, $result->price, $result->suggestion, $result->rating);
         return $cocktail;
     }
 
+    /**
+     * Apufunktio joka muuttaa 1 arvoksi true ja 0 arvoksi false
+     * @param type $bit 1 tai 0
+     * @return boolean  palautettava totuusarvo
+     */
     public static function suggestionbitToBoolean($bit) {
         if ($bit == 1) {
             return true;
@@ -286,6 +291,11 @@ class cocktail {
         }
     }
 
+      /**
+     * Apufunktio joka muuttaa truen arvoksi 1 ja falsen arvoksi 0
+     * @param type $suggestion  false tai true
+     * @return boolean  palautettava numero
+     */
     public static function booleanToSuggestionBit($suggestion) {
         if ($suggestion) {
             return 1;
