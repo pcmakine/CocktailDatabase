@@ -18,7 +18,7 @@ if (empty($_POST["user"]) && isset($_POST['submitbutton'])) {
     showLoginScreen("registrationview.php", $data);
 }
 
-$data['user'] = $_POST["user"];
+$data['user'] = htmlspecialchars($_POST["user"]);
 
 if (empty($_POST["password"]) && isset($_POST['submitbutton'])) {
     $data['error'] = "Rekisteröityminen epäonnistui! Et antanut salasanaa.";

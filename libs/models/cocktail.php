@@ -3,6 +3,10 @@
 require_once "connection.php";
 require_once "database.php";
 
+/**
+ * Cocktail luokan malli, joka tarjoaa palveluita drinkkien lisäämiseen, poistamiseen ja muokkaamiseen.
+ * Myös drinkkien arvosanoja voi luokata tämän luokan metodien avulla.
+ */
 class cocktail {
 
     private $id;
@@ -12,6 +16,15 @@ class cocktail {
     private $rating;
     private $suggestion;
 
+    /**
+     * Tekee cocktail -olion, joka mallintaa drinkkiä tietokannassa
+     * @param type $id  Drinkin id, juokseva numerointi
+     * @param type $name    Drinkin nimi
+     * @param type $recipe  Drinkin valmistusohje
+     * @param type $price   Drinkin hinta
+     * @param type $suggestion   Onko drinkki ehdotus vai ei. Tallennetaan boolean tyyppisenä. Arvo true tarkoittaa että drinkki on ehdotus
+     * @param type $rating  Drinkin keskimääräinen arvosana
+     */
     public function __construct($id, $name, $recipe, $price, $suggestion, $rating) {
         $this->id = $id;
         $this->name = trim($name);
@@ -27,12 +40,24 @@ class cocktail {
         $this->fixEmptyAttributes();
     }
 
+    /**
+     * Apufunktio joka antaa hinnalle arvon null jos sen arvona on tyhjä merkkijono
+     */
     private function fixEmptyAttributes() {
         if ($this->price == '') {
             $this->price = null; //the user might give an empty string for price
         }
     }
 
+    /**
+     * Hakee drinkkejä tietokannasta hakutermin ja muiden parametrien perusteella
+     * @param string $searchterm    Käyttäjän antama hakutermi
+     * @param type $orderby         Järjestys jossa drinkit haetaan
+     * @param type $orderdir        Järjestyksen suunta (asc tai desc)
+     * @param type $limit           Kuinka monta tulosta palautetaan
+     * @param type $page            Millä sivulla ollaan selaamassa drinkkejä. Vaikuttaa siihen mistä kohdasta listaa tuloksia aletaan palauttaa
+     * @return type                 Palauttaa listan drinkeistä
+     */
     public function getCocktails($searchterm, $orderby, $orderdir, $limit, $page) {
 
         $sql = "SELECT cocktail.id, cocktail.cocktailname, recipe, price, suggestion::int, round(avg(rating.rating), 2) as rating" .
@@ -47,22 +72,49 @@ class cocktail {
         return database::getList($sql, $array, 'cocktail');
     }
 
+    /**
+     * Hakee drinkkejä tietokannasta hakutermin ja muiden parametrien perusteella. Hakee vain drinkit, jotka eivät ole pelkkiä ehdotuksia
+     * @param string $searchterm    Käyttäjän antama hakutermi
+     * @param type $orderby         Järjestys jossa drinkit haetaan
+     * @param type $orderdir        Järjestyksen suunta (asc tai desc)
+     * @param type $limit           Kuinka monta tulosta palautetaan
+     * @param type $page            Millä sivulla ollaan selaamassa drinkkejä. Vaikuttaa siihen mistä kohdasta listaa tuloksia aletaan palauttaa
+     * @return type                 Palauttaa listan drinkeistä
+     */
     public function getApprovedCocktails($searchterm, $orderby, $orderdir, $limit, $page) {
-   
+
         return cocktail::getApprovedOrSuggestions($searchterm, $orderby, $orderdir, $limit, $page, 0);
     }
 
+    /**
+     * Hakee drinkkejä tietokannasta hakutermin ja muiden parametrien perusteella. Hakee vain pelkät ehdotukset
+     * @param string $searchterm    Käyttäjän antama hakutermi
+     * @param type $orderby         Järjestys jossa drinkit haetaan
+     * @param type $orderdir        Järjestyksen suunta (asc tai desc)
+     * @param type $limit           Kuinka monta tulosta palautetaan
+     * @param type $page            Millä sivulla ollaan selaamassa drinkkejä. Vaikuttaa siihen mistä kohdasta listaa tuloksia aletaan palauttaa
+     * @return type                 Palauttaa listan drinkeistä
+     */
     public function getSuggestions($searchterm, $orderby, $orderdir, $limit, $page) {
         return cocktail::getApprovedOrSuggestions($searchterm, $orderby, $orderdir, $limit, $page, 1);
     }
-    
-    public static function getApprovedOrSuggestions($searchterm, $orderby, $orderdir, $limit, $page, $suggestion){
+
+    /**
+     * Apufunktio joita getApprovedCocktails ja getSuggestions käyttävät
+     * @param string $searchterm    Käyttäjän antama hakutermi
+     * @param type $orderby         Järjestys jossa drinkit haetaan
+     * @param type $orderdir        Järjestyksen suunta (asc tai desc)
+     * @param type $limit           Kuinka monta tulosta palautetaan
+     * @param type $page            Millä sivulla ollaan selaamassa drinkkejä. Vaikuttaa siihen mistä kohdasta listaa tuloksia aletaan palauttaa
+     * @return type                 Palauttaa listan drinkeistä
+     */
+    public static function getApprovedOrSuggestions($searchterm, $orderby, $orderdir, $limit, $page, $suggestion) {
         $sql = "SELECT cocktail.id, cocktail.cocktailname, recipe, price, suggestion::int, round(avg(rating.rating), 2) as rating" .
                 " from cocktail left join rating on cocktail.id = rating.cocktailid" .
                 " where suggestion = ? and lower(cocktail.cocktailname) like lower(?)" .
                 " group by cocktail.id, cocktail.cocktailname, recipe, price, suggestion" .
                 " order by " . $orderby . " " . $orderdir . " nulls last LIMIT ? OFFSET ?";
-        
+
         $searchterm = "%" . $searchterm . "%";
         $array = array($suggestion, $searchterm, $limit, ($page - 1) * $limit);
         $results = database::getList($sql, $array, 'cocktail');
@@ -70,6 +122,11 @@ class cocktail {
         return $results;
     }
 
+    /**
+     * Hakee kannasta yhden drinkin id:n perusteella
+     * @param type $id  drinkin id
+     * @return type     palauttaa cocktail olion
+     */
     public function getSingleCocktail($id) {
         $sql = "SELECT cocktail.id, cocktail.cocktailname, recipe, price, suggestion::int, round(avg(rating.rating), 2) as rating from cocktail left join rating on cocktail.id = rating.cocktailid where id = ?" .
                 " group by cocktail.id, cocktail.cocktailname, recipe, price, suggestion";
@@ -77,6 +134,10 @@ class cocktail {
         return database::getSingle($sql, $array, 'cocktail');
     }
 
+    /**
+     * Lisää drinkin kantaan
+     * @return type palauttaa onnistuiko lisäys vai ei
+     */
     public function addCocktail() {
         $sql = "insert into cocktail(cocktailname, recipe, price, suggestion) values(?,?,?,?) returning id";
 
@@ -89,6 +150,10 @@ class cocktail {
         return $ok;
     }
 
+    /**
+     * Poistaa yhden drinkin kannasta
+     * @param type $id drinkin id
+     */
     public static function removeCocktail($id) {
         $sql = "delete from cocktail where id = ?";
 
@@ -96,6 +161,14 @@ class cocktail {
         $query->execute(array($id));
     }
 
+    /**
+     * Päivittää drinkin tiedot
+     * @param type $id  drinkin id
+     * @param type $name    drinkin nimi
+     * @param type $recipe  drinkin valmistusohje
+     * @param null $price   drinkin hinta
+     * @param type $suggestion  onko drinkki ehdotus vai ei
+     */
     public function updateCocktail($id, $name, $recipe, $price, $suggestion) {
         $sql = "UPDATE cocktail SET cocktailname = ?, recipe = ?, price = ?, suggestion = ? WHERE id = ?";
         if ($price == '') {
@@ -106,6 +179,11 @@ class cocktail {
         $ok = $query->execute(array($name, $recipe, $price, cocktail::booleanToSuggestionBit($suggestion), $id));
     }
 
+    /**
+     * Lisää käyttäjälle arvosanan drinkille jolla on tämän olion id
+     * @param type $username    käyttäjänimi joka antoi arvosanan
+     * @param type $rating      arvosana
+     */
     public function addRating($username, $rating) {
         if ($rating != '') {
             $sql = "insert into rating(rating, username, cocktailid) values(?,?,?)";
@@ -118,18 +196,31 @@ class cocktail {
         }
     }
 
+    /**
+     * Poistaa kaikki drinkin arvostelut kannasta
+     * @param type $id  drinkin id
+     */
     public static function removeRatings($id) {
         $sql = "delete from rating where cocktailid = ?";
         $query = connection::getConnection()->prepare($sql);
         $query->execute(array($id));
     }
 
+    /**
+     * Poistaa cocktail_ingredient_link taulusta drinkkiin liittyvät ainesosat
+     * @param type $id  drinkin id
+     */
     public static function removeIngredients($id) {
         $sql = "delete from cocktail_ingredient_link where cocktailid = ?";
         $array = array($id);
         database::nonReturningExecution($sql, $array);
     }
 
+    /**
+     * Palauttaa drinkkien määrän jotka kannasta löytyvät annetulla hakusanalla
+     * @param string $searchterm    hakusana
+     * @return type     palauttaa drinkkien määrän
+     */
     public function numofCocktails($searchterm) {
         $sql = "SELECT COUNT(id) FROM cocktail where lower(cocktailname) like lower(?)";
         $searchterm = "%" . $searchterm . "%";
@@ -138,6 +229,11 @@ class cocktail {
         return database::getCount($sql, $array);
     }
 
+    /**
+    * Palauttaa hyväksyttyjen drinkkien määrän jotka kannasta löytyvät annetulla hakusanalla
+     * @param string $searchterm    hakusana
+     * @return type     palauttaa drinkkien määrän
+     */
     public function numofApprovedCocktails($searchterm) {
 
         $sql = "SELECT COUNT(id) FROM cocktail where suggestion =? and lower(cocktailname) like lower(?)";
@@ -147,6 +243,11 @@ class cocktail {
         return database::getCount($sql, $array);
     }
 
+    /**
+    * Palauttaa ehdotettujen drinkkien määrän jotka kannasta löytyvät annetulla hakusanalla
+     * @param string $searchterm    hakusana
+     * @return type     palauttaa drinkkien määrän
+     */
     public function numofSuggestions($searchterm) {
 
         $sql = "SELECT COUNT(id) FROM cocktail where suggestion =? and lower(cocktailname) like lower(?)";
@@ -156,29 +257,22 @@ class cocktail {
         return database::getCount($sql, $array);
     }
 
-    private function setAvgRating() {
-        $sql = "SELECT cocktailid, rating from rating where cocktailid = ?";
-        $query = connection::getConnection()->prepare($sql);
-        $query->execute(array($this->id));
 
-        $rows = 0;
-        $sumofratings = 0;
-        foreach ($query->fetchAll(PDO::FETCH_OBJ) AS $result) {
-            $sumofratings = $sumofratings + $result->rating;
-            $rows++;
-        }
-        if ($rows == 0) {
-            $this->rating = "ei vielä arvosteltu";
-        } else {
-            $this->rating = ($sumofratings / $rows);
-        }
-    }
-
+    /**
+     * Palauttaa tiedon siitä onko käyttäjä arvostellut jo kyseisen drinkin
+     * @param type $username    käyttäjänimi
+     * @return type palauttaa true tai false. True jos arvostelu löytyy
+     */
     public function ratingExists($username) {
         $sql = "SELECT count (cocktailid) from rating where username = ? and cocktailid = ?";
         return database::getCount($sql, array($username, $this->getId())) > 0;
     }
 
+    /**
+     * tekee uuden drinkkiolion
+     * @param type $result  olio josta luotavan olion tiedot löytyvät
+     * @return \cocktail
+     */
     public static function createNewOne($result) {
         $cocktail = new cocktail($result->id, $result->cocktailname, $result->recipe, $result->price, $result->suggestion, $result->rating);
         return $cocktail;

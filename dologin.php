@@ -22,7 +22,7 @@ if (empty($_POST["user"]) && isset($_POST['submitbutton'])) {
     ));
 }
 
-$uname = $_POST["user"];
+$uname = htmlspecialchars($_POST["user"]);
 
 if (empty($_POST["password"]) && isset($_POST['submitbutton'])) {
     showLoginScreen("views/dologinview.php", array(
@@ -31,9 +31,10 @@ if (empty($_POST["password"]) && isset($_POST['submitbutton'])) {
     ));
 }
 
-$password = $_POST["password"];
+$password = htmlspecialchars($_POST["password"]);
 
 $user = user::getSingleUser($uname, $password);
+
 if ($user != NULL) {
     signIn($uname);
 } else{

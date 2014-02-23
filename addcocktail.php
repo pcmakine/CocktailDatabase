@@ -16,17 +16,17 @@ if (!isset($_POST["savebutton"])) {
         'title' => 'add cocktail',
         'accessrights' => getUserAccessRights(),
         'cocktailname' => htmlspecialchars($_POST['name']),
-        'rating' => $_POST['rating'],
-        'price' => $_POST['price'],
-        'ingredients' => $_POST['ingredient'],
+        'rating' => htmlspecialchars($_POST['rating']),
+        'price' => htmlspecialchars($_POST['price']),
+        'ingredients' => ($_POST['ingredient']),
         'recipe' => htmlspecialchars($_POST['recipe'])
     ));
 } else {
     $cocktail = new cocktail(-1, htmlspecialchars($_POST["name"]), htmlspecialchars($_POST["recipe"]), $_POST["price"], getCorrectValueForSuggestion());
     $cocktail->addCocktail();
-    $cocktail->addRating($_SESSION['signedin'], $_POST["rating"]);
+    $cocktail->addRating($_SESSION['signedin'], htmlspecialchars($_POST["rating"]));
 
-    ingredient::addAndLinkIngredients($_POST['ingredient'], $cocktail->getId());
+    ingredient::addAndLinkIngredients(($_POST['ingredient']), $cocktail->getId());
 
     if(getUserAccessRights()){
         $_SESSION['announcement'] = "Drinkki lisätty onnistuneesti.";

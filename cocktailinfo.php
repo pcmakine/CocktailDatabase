@@ -5,13 +5,19 @@ require_once 'libs/models/cocktail.php';
 require_once 'libs/models/ingredient.php';
 
 $id = (int) $_GET['id'];
+
+if(isset($_POST['cocktailid'])){
+    $id = (int) $_POST['cocktailid'];
+}
+
 $cocktail = cocktail::getSingleCocktail($id);
 $ingredientlist = ingredient::getIngredientsForCocktail($id);
 $dataArray = array(
     'cocktail' => $cocktail,
     'accessrights' => getUserAccessRights(),
     'title' => 'Drinkkiarkisto-info',
-    'ingredients' => $ingredientlist
+    'ingredients' => $ingredientlist,
+    'id' => $id
 );
 
 
@@ -24,7 +30,7 @@ if (!isSignedIn()) {
         showView('cocktailinfoview.php', $dataArray);
     } else if (isset($_POST['edit'])) {        //the user has pressed the edit button
         $dataArray['editable'] = true;
-        $dataArray['ingredients'] = $_POST['ingredient'];
+        $dataArray['ingredients'] = ($_POST['ingredient']);
         showView('cocktailinfoview.php', $dataArray);
     } else if (isset($_POST['confirmremove'])) {
         cocktail::removeCocktail($id);
@@ -32,8 +38,8 @@ if (!isSignedIn()) {
         header('Location: frontpage.php');
     } else if (isset($_POST['removebutton'])) {
 
-        $dataArray['error'] = 'Haluatko varmasti poistaa drinkin tietokannasta?';
-        $dataArray['ingredients'] = $_POST['ingredient'];
+        $dataArray['errorconfirm'] = 'Haluatko varmasti poistaa drinkin tietokannasta?';
+        $dataArray['ingredients'] = ($_POST['ingredient']);
         showView('cocktailinfoview.php', $dataArray);
     } else if (isset($_POST['addingredientbutton'])) {
         $_POST['ingredient'][] = '';
@@ -56,7 +62,8 @@ if (!isSignedIn()) {
         cocktail::removeIngredients($id);
         ingredient::addAndLinkIngredients($_POST['ingredient'], $id);
         $cocktail->addRating(getUserName(), $_POST['rating']);
-        cocktail::updateCocktail($id, htmlspecialchars($_POST['name']), htmlspecialchars($_POST['recipe']), $_POST['price'], $cocktail->getSuggestion());
+        cocktail::updateCocktail($id, htmlspecialchars($_POST['name']), htmlspecialchars($_POST['recipe']),
+                htmlspecialchars($_POST['price']), $cocktail->getSuggestion());
         
         if(getUserAccessRights()){
             $_SESSION['announcement'] = 'Drinkin muokkaus onnistui!';
@@ -66,7 +73,6 @@ if (!isSignedIn()) {
        
         header('Location: frontpage.php');
     } else if (isset($_POST['acceptsuggestion'])) {
-        var_dump("hyväksytty!");
         cocktail::updateCocktail($id, $cocktail->getName(), $cocktail->getRecipe(), $cocktail->getPrice(), false);
         $_SESSION['announcement'] = 'Ehdotus hyväksytty!';
         header('Location: frontpage.php');

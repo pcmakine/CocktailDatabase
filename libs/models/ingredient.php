@@ -23,18 +23,17 @@ class ingredient {
     public function linkIngredientWithCocktail($cocktailId) {
         if (!($this->linkExist($cocktailId))) {
             $sql = "insert into cocktail_ingredient_link(ingname, cocktailid) values(?,?)";
+            $array = array($this->name, $cocktailId);
+            database::nonReturningExecution($sql, $array);
 
-            $query = connection::getConnection()->prepare($sql);
-            $query->execute(array($this->name, $cocktailId));
         }
     }
 
     public function removeIngredientCocktailLink($cocktailId) {
         if (($this->linkExist($cocktailId))) {
             $sql = "delete from cocktail_ingredient_link where cocktailid = ? and ingname = ?";
-
-            $query = connection::getConnection()->prepare($sql);
-            $query->execute(array($cocktailId, $this->name));
+            $array = array($cocktailId, $this->name);
+            database::nonReturningExecution($sql, $array);
         }
     }
 
@@ -62,11 +61,8 @@ class ingredient {
 
     public function ingredientExist() {
         $sql = "select count(ingname) from ingredient where ingname = ?";
-        $query = connection::getConnection()->prepare($sql);
-        $query->execute(array($this->name));
-
-        $result = $query->fetchColumn();
-        if ($result > 0) {
+        $array = array($this->name);
+        if(database::getCount($sql, $array) > 0){
             return true;
         }
         return false;
@@ -74,11 +70,8 @@ class ingredient {
 
     public function linkExist($cocktailId) {
         $sql = "select count(*) from cocktail_ingredient_link where ingname = ? and cocktailid = ?";
-        $query = connection::getConnection()->prepare($sql);
-        $query->execute(array($this->name, $cocktailId));
-
-        $result = $query->fetchColumn();
-        if ($result > 0) {
+        $array = array($this->name, $cocktailId);
+        if(database::getCount($sql, $array) > 0){
             return true;
         }
         return false;

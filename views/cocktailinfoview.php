@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <form name="edit" action="cocktailinfo.php?id=<?php echo $data->cocktail->getId() ?>" method="POST">
     <div class="row">
-        <div class="col-xs-4">
+        <div class="col-md-4">
             <div id ="recipe"><label class="control-label" for="recipefield">Valmistusohje:</label><textarea class="form-control" id="recipefield" cols=45 rows=20 name="recipe" <?php if (!$data->editable): ?>readonly <?php endif; ?> 
                                                                                                              ><?php if (strlen($data->cocktail->getRecipe()) == 0) { ?>Drinkille ei ole vielä lisätty reseptiä!<?php
 } else {
@@ -22,8 +22,9 @@
 
 
         </div>
-        <div class="col-xs-2">
+        <div class="col-md-4">
             <div class ="infofields">
+                <input type="hidden" name="cocktailid" value="<?php echo $data->id ?>">
                 <label class="control-label" for="name"> Nimi: </label><input class="form-control" type="text" id="name" name="name"
                                                                               value="<?php echo $data->cocktail->getName() ?>"
                                                                               <?php if (!$data->editable) { ?> 
@@ -51,7 +52,7 @@
             </div>
         </div>
 
-        <div class="col-xs-3">
+        <div class="col-md-4">
             <div class ="ingredientfields">
                 <?php for ($i = 0; $i < count($data->ingredients); $i++) { ?>
 
@@ -83,10 +84,10 @@
     </div>
 
     <?php
-    if (!empty($data->error)):
+    if (!empty($data->errorconfirm)):
         ?>
         <div class="alert alert-danger"> 
-            <?php echo $data->error; ?><br>
+            <?php echo $data->errorconfirm; ?><br>
             <button class="btn btn-default" type ="submit" name="confirmremove" id="remove">Kyllä</button>
             <button class="btn btn-default" type ="submit" name="cancelremove" id="cancelremove">Peruuta</button>
         </div>

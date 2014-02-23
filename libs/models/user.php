@@ -14,25 +14,8 @@ class user {
         $this->password = $password;
         $this->accessrights = user::accessbitToBoolean($accessrights);
     }
-
-    public function getUsername() {
-        return $this->username;
-    }
-
-    public function getPassword() {
-        return $this->password;
-    }
-
-    public function getRights() {
-        return $this->accessrights;
-    }
-
-    public static function createNewOne($result) {
-        $user = new user($result->username, $result->password, $result->accessrights);
-        return $user;
-    }
-
-    public static function getUsers() {
+    
+        public static function getUsers() {
         $sql = "SELECT username,password, accessrights::int from users order by username";
         $array = array();
         return database::getList($sql, $array, 'user');
@@ -40,17 +23,8 @@ class user {
 
     public static function getSingleUser($user, $userpsw) {
         $sql = "SELECT username, password, accessrights::int from users where username = ? AND password = ? LIMIT 1";
-
-        $query = connection::getConnection()->prepare($sql);
-        $query->execute(array($user, $userpsw));
-
-        $result = $query->fetchObject();
-        if ($result == null) {
-            return null;
-        } else {
-            $user = new user($result->username, $result->password, $result->accessrights);
-            return $user;
-        }
+        $array = array($user, $userpsw);
+        return database::getSingle($sql, $array, 'user');
     }
 
     public static function getAccess($uname) {
@@ -67,31 +41,36 @@ class user {
         }
     }
 
+
     public function updateAccessRights($newRights) {
         $sql = "UPDATE users SET accessrights = ? WHERE username = ?";
-        $query = connection::getConnection()->prepare($sql);
-        $query->execute(array($newRights, $this->username));
+        $array = array($newRights, $this->username);
+        database::nonReturningExecution($sql, $array);
     }
 
     public static function changePassword($password, $username) {
         $sql = "UPDATE users SET password = ? WHERE username = ?";
-        $query = connection::getConnection()->prepare($sql);
-        $query->execute(array($password, $username));
+        $array = array($password, $username);
+        database::nonReturningExecution($sql, $array);
     }
 
     public function createUser() {
         $sql = "insert into users(username, password, accessrights) values(?, ?, ?)";
-        $query = connection::getConnection()->prepare($sql);
-        $query->execute(array($this->username, $this->password, user::booleanToAccessbit($this->accessrights)));
+        $array = array($this->username, $this->password, user::booleanToAccessbit($this->accessrights));
+        database::nonReturningExecution($sql, $array);
     }
 
     public function userExists() {
         $sql = "SELECT count (username) from users where username = ?";
-        $query = connection::getConnection()->prepare($sql);
-        $query->execute(array($this->username));
+        $array = array($this->username);
 
-        $result = $query->fetchColumn();
-        return $result > 0;
+        return database::getCount($sql, $array) > 0;
+    }
+    
+    
+    public static function createNewOne($result) {
+        $user = new user($result->username, $result->password, $result->accessrights);
+        return $user;
     }
 
     public static function accessbitToBoolean($bit) {
@@ -108,6 +87,19 @@ class user {
         } else {
             return 0;
         }
+    }
+
+
+    public function getUsername() {
+        return $this->username;
+    }
+
+    public function getPassword() {
+        return $this->password;
+    }
+
+    public function getRights() {
+        return $this->accessrights;
     }
 
 }

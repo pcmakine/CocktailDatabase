@@ -35,6 +35,11 @@ class database {
         $query->execute($array);
         
         $result = $query->fetchObject();
+        
+        if($result == null){
+            return null;
+        }
+        
         return $class::createNewOne($result);
     }
 

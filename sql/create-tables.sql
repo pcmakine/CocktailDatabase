@@ -1,4 +1,4 @@
-create table users(username varchar(64) primary key not null,
+create table users(username varchar(30) primary key not null,
                       password varchar(20) not null,
                        accessrights boolean not null);
 
