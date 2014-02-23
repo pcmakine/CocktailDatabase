@@ -28,7 +28,12 @@ if (!isset($_POST["savebutton"])) {
 
     ingredient::addAndLinkIngredients($_POST['ingredient'], $cocktail->getId());
 
-    $_SESSION['announcement'] = "Drinkki lisätty onnistuneesti.";
+    if(getUserAccessRights()){
+        $_SESSION['announcement'] = "Drinkki lisätty onnistuneesti.";
+    }else{
+        $_SESSION['announcement'] = "Ehdotus lisätty onnistuneesti. Drinkkisi tulee näkyviin kun ylläpitäjä on hyväksynyt sen.";
+    }
+    
     header('Location: frontpage.php');
 }
 
@@ -37,17 +42,6 @@ function getCorrectValueForSuggestion() {
         return 0;
     } else {
         return 1;
-    }
-}
-
-function getNumbOfIngrd() {
-    foreach ($_POST as $key => $value) {
-        if (substr($key, 0, 9) == "lastingrd") {
-            $identifier = substr($key, 4);
-            if (isset($value['tag' . $identifier])) {
-                inserttag('tag', $identifier);
-            }
-        }
     }
 }
 

@@ -14,6 +14,7 @@ $dataArray = array(
     'ingredients' => $ingredientlist
 );
 
+
 if (!isSignedIn()) {
     header('Location: dologin.php');
 } else {

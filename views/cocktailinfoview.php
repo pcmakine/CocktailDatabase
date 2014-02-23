@@ -37,7 +37,12 @@
                 <label class="control-label" for="rating"> 
                     Anna arvosana:
                 </label><input class="form-control"  type="text" name="rating" id="rating" pattern="[1-5]" title="Arvosanan täytyy olla välillä 1-5"
-                               placeholder="<?php echo 'Keskiarvo: ' . $data->cocktail->getRating() ?>" >
+                               placeholder="<?php if($data->cocktail->getRating() !=''){ 
+                               echo ('Keskiarvo: ' . $data->cocktail->getRating()) ;
+                               }
+                               else {
+                                   echo ('Ei vielä arvosteluja') ;
+                               }?>" >
 
                 <?php if ($data->accessrights): ?>
                     <label class="control-label" for="suggestion">Ehdotus</label><input class="form-control"  type="text" name="suggestion" id="suggestion"

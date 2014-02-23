@@ -17,7 +17,7 @@ if (isset($_GET['page'])) {
     if ($page < 1)
         $page = 1;
 }
-$perpage = 3;
+$perpage = 10;
 
 $list = array();
 $numofcocktails;

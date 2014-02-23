@@ -12,7 +12,7 @@ class cocktail {
     private $rating;
     private $suggestion;
 
-    public function __construct($id, $name, $recipe, $price, $suggestion) {
+    public function __construct($id, $name, $recipe, $price, $suggestion, $rating) {
         $this->id = $id;
         $this->name = trim($name);
         $this->recipe = trim($recipe);
@@ -23,7 +23,7 @@ class cocktail {
             $this->suggestion = $suggestion;
         }
 
-        $this->setAvgRating();
+        $this->rating = $rating;
         $this->fixEmptyAttributes();
     }
 
@@ -35,45 +35,46 @@ class cocktail {
 
     public function getCocktails($searchterm, $orderby, $orderdir, $limit, $page) {
 
-        $sql = "SELECT id, cocktailname, recipe, price, suggestion::int from cocktail where lower(cocktailname) like lower(?) order by " .
-                $orderby . " " . $orderdir . " LIMIT ? OFFSET ?";
-        $searchterm = "%" . $searchterm . "%";
+        $sql = "SELECT cocktail.id, cocktail.cocktailname, recipe, price, suggestion::int, round(avg(rating.rating), 2) as rating" .
+                " from cocktail left join rating on cocktail.id = rating.cocktailid" .
+                " where lower(cocktail.cocktailname) like lower(?)" .
+                " group by cocktail.id, cocktail.cocktailname, recipe, price, suggestion" .
+                " order by " . $orderby . " " . $orderdir . " nulls last LIMIT ? OFFSET ?";
 
-        if ($orderby == 'rating') {
-            //get all the cocktails and order them by rating. return the right ones from the list
-        }
+        $searchterm = "%" . $searchterm . "%";
 
         $array = array($searchterm, $limit, ($page - 1) * $limit);
         return database::getList($sql, $array, 'cocktail');
     }
 
     public function getApprovedCocktails($searchterm, $orderby, $orderdir, $limit, $page) {
-        $sql = "SELECT id, cocktailname, recipe, price, suggestion::int from cocktail where suggestion = ? and lower(cocktailname) like lower(?) order by " .
-                $orderby . " " . $orderdir . " LIMIT ? OFFSET ?";
-        $searchterm = "%" . $searchterm . "%";
-        $array = array(0, $searchterm, $limit, ($page - 1) * $limit);
-
-        $results = database::getList($sql, $array, 'cocktail');
-
-        return $results;
+   
+        return cocktail::getApprovedOrSuggestions($searchterm, $orderby, $orderdir, $limit, $page, 0);
     }
 
     public function getSuggestions($searchterm, $orderby, $orderdir, $limit, $page) {
-        $sql = "SELECT id, cocktailname, recipe, price, suggestion::int from cocktail where suggestion = ? and lower(cocktailname) like lower(?) order by " .
-                $orderby . " " . $orderdir . " LIMIT ? OFFSET ?";
+        return cocktail::getApprovedOrSuggestions($searchterm, $orderby, $orderdir, $limit, $page, 1);
+    }
+    
+    public static function getApprovedOrSuggestions($searchterm, $orderby, $orderdir, $limit, $page, $suggestion){
+        $sql = "SELECT cocktail.id, cocktail.cocktailname, recipe, price, suggestion::int, round(avg(rating.rating), 2) as rating" .
+                " from cocktail left join rating on cocktail.id = rating.cocktailid" .
+                " where suggestion = ? and lower(cocktail.cocktailname) like lower(?)" .
+                " group by cocktail.id, cocktail.cocktailname, recipe, price, suggestion" .
+                " order by " . $orderby . " " . $orderdir . " nulls last LIMIT ? OFFSET ?";
+        
         $searchterm = "%" . $searchterm . "%";
-        $array = array(1, $searchterm, $limit, ($page - 1) * $limit);
-
+        $array = array($suggestion, $searchterm, $limit, ($page - 1) * $limit);
         $results = database::getList($sql, $array, 'cocktail');
 
         return $results;
     }
 
     public function getSingleCocktail($id) {
-        $sql = "SELECT * from cocktail where id = ?";
+        $sql = "SELECT cocktail.id, cocktail.cocktailname, recipe, price, suggestion::int, round(avg(rating.rating), 2) as rating from cocktail left join rating on cocktail.id = rating.cocktailid where id = ?" .
+                " group by cocktail.id, cocktail.cocktailname, recipe, price, suggestion";
         $array = array($id);
         return database::getSingle($sql, $array, 'cocktail');
-
     }
 
     public function addCocktail() {
@@ -109,10 +110,10 @@ class cocktail {
         if ($rating != '') {
             $sql = "insert into rating(rating, username, cocktailid) values(?,?,?)";
             $array = array($rating, $username, $this->getId());
-            if($this->ratingExists($username)){
+            if ($this->ratingExists($username)) {
                 $sql = "update rating set rating = ? where username = ? and cocktailid = ?";
             }
-            
+
             database::nonReturningExecution($sql, $array);
         }
     }
@@ -173,14 +174,13 @@ class cocktail {
         }
     }
 
-    public function ratingExists($username){
+    public function ratingExists($username) {
         $sql = "SELECT count (cocktailid) from rating where username = ? and cocktailid = ?";
         return database::getCount($sql, array($username, $this->getId())) > 0;
-        
     }
 
     public static function createNewOne($result) {
-        $cocktail = new cocktail($result->id, $result->cocktailname, $result->recipe, $result->price, $result->suggestion);
+        $cocktail = new cocktail($result->id, $result->cocktailname, $result->recipe, $result->price, $result->suggestion, $result->rating);
         return $cocktail;
     }
 
@@ -223,6 +223,7 @@ class cocktail {
     public function getSuggestion() {
         return $this->suggestion;
     }
+
 }
 
 ?>
